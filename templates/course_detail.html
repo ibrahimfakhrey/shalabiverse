@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.title_ar }} - Verse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/course_detail.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="{{ url_for('index') }}">
+                    <span class="logo-verse">Verse</span>
+                    <span class="logo-shalabi">شلبي</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="{{ url_for('index') }}" class="nav-link">الرئيسية</a>
+                <a href="{{ url_for('courses') }}" class="nav-link">الكورسات</a>
+                <a href="#services" class="nav-link">الخدمات</a>
+                <a href="#about" class="nav-link">من نحن</a>
+                <a href="#contact" class="nav-link">تواصل معنا</a>
+                
+                {% if current_user.is_authenticated %}
+                    <div class="nav-auth-mobile">
+                        <a href="{{ url_for('dashboard') }}" class="btn-auth btn-dashboard">لوحة التحكم</a>
+                        <a href="{{ url_for('logout') }}" class="btn-auth btn-logout">تسجيل الخروج</a>
+                    </div>
+                {% else %}
+                    <div class="nav-auth-mobile">
+                        <a href="{{ url_for('login') }}" class="btn-auth btn-login">تسجيل الدخول</a>
+                        <a href="{{ url_for('register') }}" class="btn-auth btn-register">إنشاء حساب</a>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            {% if current_user.is_authenticated %}
+                <div class="nav-auth">
+                    <a href="{{ url_for('dashboard') }}" class="btn-auth btn-dashboard">لوحة التحكم</a>
+                    <a href="{{ url_for('logout') }}" class="btn-auth btn-logout">تسجيل الخروج</a>
+                </div>
+            {% else %}
+                <div class="nav-auth">
+                    <a href="{{ url_for('login') }}" class="btn-auth btn-login">تسجيل الدخول</a>
+                    <a href="{{ url_for('register') }}" class="btn-auth btn-register">إنشاء حساب</a>
+                </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Course Header -->
+        <section class="course-header">
+            <div class="container">
+                <div class="course-header-content">
+                    <div class="course-info">
+                        <div class="breadcrumb">
+                            <a href="{{ url_for('courses') }}">الكورسات</a>
+                            <span>/</span>
+                            <span>{{ course.title_ar }}</span>
+                        </div>
+                        
+                        <h1 class="course-title">{{ course.title_ar }}</h1>
+                        <p class="course-description">{{ course.description_ar }}</p>
+                        
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="icon-user"></i>
+                                <span>{{ course.instructor_name_ar }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="icon-clock"></i>
+                                <span>{{ course.duration_hours }} ساعة</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="icon-level"></i>
+                                <span>{{ course.level }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="icon-category"></i>
+                                <span>{{ course.category }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="course-price">
+                            {% if course.price > 0 %}
+                                <span class="price">${{ "%.2f"|format(course.price) }}</span>
+                            {% else %}
+                                <span class="price free">مجاني</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="course-image">
+                        {% if course.image_url %}
+                            <img src="{{ course.image_url }}" alt="{{ course.title_ar }}" onerror="this.src='/static/images/course-placeholder.jpg'">
+                        {% else %}
+                            <div class="course-placeholder">
+                                <i class="icon-course"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Course Content -->
+        <section class="course-content-section">
+            <div class="container">
+                <div class="course-layout">
+                    <!-- Main Content -->
+                    <div class="course-main">
+                        <!-- What You'll Learn -->
+                        <div class="content-card">
+                            <h2>ماذا ستتعلم</h2>
+                            <div class="learn-content">
+                                {{ course.what_you_learn_ar | replace('\n', '<br>') | safe }}
+                            </div>
+                        </div>
+                        
+                        <!-- Target Audience -->
+                        <div class="content-card">
+                            <h2>لمن هذه الدورة</h2>
+                            <div class="audience-content">
+                                {{ course.target_audience_ar | replace('\n', '<br>') | safe }}
+                            </div>
+                        </div>
+                        
+                        <!-- Requirements -->
+                        <div class="content-card">
+                            <h2>المتطلبات</h2>
+                            <div class="requirements-content">
+                                {{ course.requirements_ar | replace('\n', '<br>') | safe }}
+                            </div>
+                        </div>
+                        
+                        <!-- Instructor -->
+                        <div class="content-card">
+                            <h2>المدرب</h2>
+                            <div class="instructor-info">
+                                <div class="instructor-avatar">
+                                    <i class="icon-instructor"></i>
+                                </div>
+                                <div class="instructor-details">
+                                    <h3>{{ course.instructor_name_ar }}</h3>
+                                    <p>{{ course.instructor_bio_ar }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course Content/Modules -->
+                        <div class="content-card">
+                            <h2>محتوى الدورة</h2>
+                            <div class="modules-list">
+                                {% for module in modules %}
+                                <div class="module-item">
+                                    <div class="module-header">
+                                        <h3>{{ module.title_ar }}</h3>
+                                        <span class="module-lessons">{{ module.lessons|length }} دروس</span>
+                                    </div>
+                                    {% if module.description_ar %}
+                                        <p class="module-description">{{ module.description_ar }}</p>
+                                    {% endif %}
+                                    
+                                    <div class="lessons-list">
+                                        {% for lesson in module.lessons %}
+                                        <div class="lesson-item {% if lesson.is_free %}free-lesson{% else %}paid-lesson{% endif %}">
+                                            <div class="lesson-info">
+                                                <i class="lesson-icon {% if lesson.is_free %}icon-play{% else %}icon-lock{% endif %}"></i>
+                                                <span class="lesson-title">{{ lesson.title_ar }}</span>
+                                                <span class="lesson-duration">{{ lesson.duration_minutes }} دقيقة</span>
+                                            </div>
+                                            {% if lesson.is_free %}
+                                                <a href="{{ url_for('lesson_player', lesson_id=lesson.id) }}" class="preview-btn">
+                                                    <i class="fas fa-play"></i>
+                                                    معاينة مجانية
+                                                </a>
+                                            {% elif user_enrolled %}
+                                                <a href="{{ url_for('lesson_player', lesson_id=lesson.id) }}" class="watch-btn">
+                                                    <i class="fas fa-play"></i>
+                                                    مشاهدة الدرس
+                                                </a>
+                                            {% else %}
+                                                <span class="locked-lesson">
+                                                    <i class="fas fa-lock"></i>
+                                                    مقفل
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sidebar -->
+                    <div class="course-sidebar">
+                        <div class="enrollment-card">
+                            {% if is_enrolled %}
+                                <div class="enrolled-status">
+                                    <i class="icon-check"></i>
+                                    <span>أنت مسجل في هذه الدورة</span>
+                                </div>
+                                <a href="{{ url_for('dashboard') }}" class="btn-primary">الذهاب إلى لوحة التحكم</a>
+                            {% else %}
+                                <div class="enrollment-options">
+                                    <h3>ابدأ رحلتك التعليمية</h3>
+                                    <p>سجل الآن واحصل على وصول كامل لجميع دروس الدورة</p>
+                                    
+                                    <div class="enrollment-buttons">
+                                        <button class="btn-primary" onclick="showEnrollmentForm()">اشترك الآن</button>
+                                        {% for module in modules %}
+                                            {% for lesson in module.lessons %}
+                                                {% if lesson.is_free %}
+                                                    <button class="btn-secondary" onclick="previewLesson({{ lesson.id }})">معاينة مجانية</button>
+                                                    {% break %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if lesson.is_free %}{% break %}{% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Course Stats -->
+                        <div class="stats-card">
+                            <h4>إحصائيات الدورة</h4>
+                            <div class="stat-item">
+                                <span class="stat-label">المدة الإجمالية:</span>
+                                <span class="stat-value">{{ course.duration_hours }} ساعة</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">عدد الوحدات:</span>
+                                <span class="stat-value">{{ modules|length }} وحدة</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">عدد الدروس:</span>
+                                <span class="stat-value">
+                                    {% set total_lessons = 0 %}
+                                    {% for module in modules %}
+                                        {% set total_lessons = total_lessons + module.lessons|length %}
+                                    {% endfor %}
+                                    {{ total_lessons }} درس
+                                </span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">المستوى:</span>
+                                <span class="stat-value">{{ course.level }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Enrollment Modal -->
+    <div id="enrollmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>التسجيل في الدورة</h3>
+                <span class="close" onclick="closeEnrollmentForm()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>للتسجيل في هذه الدورة، يرجى ملء النموذج التالي وسنتواصل معك قريباً:</p>
+                <form id="enrollmentForm" action="#" method="POST">
+                    <div class="form-group">
+                        <label for="name">الاسم الكامل</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">رقم الهاتف</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">البريد الإلكتروني (اختياري)</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">رسالة إضافية (اختياري)</label>
+                        <textarea id="message" name="message" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">إرسال طلب التسجيل</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <span class="logo-verse">Verse</span>
+                        <span class="logo-shalabi">شلبي</span>
+                    </div>
+                    <p>منصة تعليمية متخصصة في التكنولوجيا والبرمجة</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>روابط سريعة</h4>
+                    <ul>
+                        <li><a href="{{ url_for('index') }}">الرئيسية</a></li>
+                        <li><a href="{{ url_for('courses') }}">الكورسات</a></li>
+                        <li><a href="#services">الخدمات</a></li>
+                        <li><a href="#about">من نحن</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>تواصل معنا</h4>
+                    <ul>
+                        <li>البريد الإلكتروني: info@verse-shalabi.com</li>
+                        <li>الهاتف: +20 123 456 7890</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Verse شلبي. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/course_detail.js') }}"></script>
+</body>
+</html>

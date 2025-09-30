@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ lesson.title_ar }} - {{ course.title_ar }}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/lesson_player.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="lesson-container">
+        <!-- Header -->
+        <header class="lesson-header">
+            <div class="header-content">
+                <div class="course-info">
+                    <a href="{{ url_for('course_detail', course_id=course.id) }}" class="back-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        العودة للدورة
+                    </a>
+                    <h1>{{ course.title_ar }}</h1>
+                    <span class="lesson-title">{{ lesson.title_ar }}</span>
+                </div>
+                {% if user_enrolled %}
+                <div class="progress-info">
+                    <span class="progress-text">التقدم في الدورة</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ enrollment.progress_percentage if enrollment else 0 }}%"></div>
+                    </div>
+                    <span class="progress-percentage">{{ enrollment.progress_percentage if enrollment else 0 }}%</span>
+                </div>
+                {% endif %}
+            </div>
+        </header>
+
+        <div class="lesson-content">
+            <!-- Video Player Section -->
+            <div class="video-section">
+                <div class="video-container">
+                    {% if lesson.video_url %}
+                        {% if lesson.video_url.startswith('http') %}
+                            <iframe src="{{ lesson.video_url }}" 
+                                    frameborder="0" 
+                                    allowfullscreen
+                                    class="lesson-video"></iframe>
+                        {% else %}
+                            <video controls class="lesson-video">
+                                <source src="{{ lesson.video_url }}" type="video/mp4">
+                                متصفحك لا يدعم تشغيل الفيديو.
+                            </video>
+                        {% endif %}
+                    {% else %}
+                        <div class="video-placeholder">
+                            <i class="fas fa-play-circle"></i>
+                            <p>لا يوجد فيديو متاح لهذا الدرس</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Lesson Info -->
+                <div class="lesson-info">
+                    <div class="lesson-details">
+                        <h2>{{ lesson.title_ar }}</h2>
+                        {% if lesson.description_ar %}
+                            <p class="lesson-description">{{ lesson.description_ar }}</p>
+                        {% endif %}
+                        <div class="lesson-meta">
+                            <span class="duration">
+                                <i class="fas fa-clock"></i>
+                                {{ lesson.duration_minutes }} دقيقة
+                            </span>
+                            {% if lesson.is_free %}
+                                <span class="free-badge">مجاني</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if user_enrolled %}
+                    <div class="lesson-actions">
+                        {% if lesson_progress and lesson_progress.is_completed %}
+                            <button class="completed-btn" disabled>
+                                <i class="fas fa-check"></i>
+                                تم إكمال الدرس
+                            </button>
+                        {% else %}
+                            <button class="complete-btn" onclick="completeLesson({{ lesson.id }})">
+                                <i class="fas fa-check"></i>
+                                إكمال الدرس
+                            </button>
+                        {% endif %}
+                    </div>
+                    {% elif not lesson.is_free %}
+                    <div class="enrollment-prompt">
+                        <p>يجب التسجيل في الدورة لمشاهدة هذا الدرس</p>
+                        <a href="{{ url_for('course_detail', course_id=course.id) }}" class="enroll-btn">
+                            التسجيل في الدورة
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="lesson-sidebar">
+                <div class="module-navigation">
+                    <h3>{{ lesson.module.title_ar }}</h3>
+                    <div class="lessons-list">
+                        {% for module_lesson in module_lessons %}
+                        <div class="lesson-item {% if module_lesson.id == lesson.id %}active{% endif %}">
+                            <a href="{{ url_for('lesson_player', lesson_id=module_lesson.id) }}" 
+                               class="lesson-link {% if not module_lesson.is_free and not user_enrolled %}locked{% endif %}">
+                                <div class="lesson-number">{{ loop.index }}</div>
+                                <div class="lesson-content">
+                                    <h4>{{ module_lesson.title_ar }}</h4>
+                                    <span class="lesson-duration">{{ module_lesson.duration_minutes }} دقيقة</span>
+                                </div>
+                                <div class="lesson-status">
+                                    {% if not module_lesson.is_free and not user_enrolled %}
+                                        <i class="fas fa-lock"></i>
+                                    {% elif user_enrolled %}
+                                        {% set progress = lesson_progress_map.get(module_lesson.id) %}
+                                        {% if progress and progress.is_completed %}
+                                            <i class="fas fa-check-circle completed"></i>
+                                        {% else %}
+                                            <i class="fas fa-play-circle"></i>
+                                        {% endif %}
+                                    {% else %}
+                                        <i class="fas fa-play-circle"></i>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Course Resources -->
+                {% if user_enrolled %}
+                <div class="course-resources">
+                    <h3>مصادر الدورة</h3>
+                    <div class="resources-list">
+                        <a href="#" class="resource-item">
+                            <i class="fas fa-file-pdf"></i>
+                            ملاحظات الدرس
+                        </a>
+                        <a href="#" class="resource-item">
+                            <i class="fas fa-download"></i>
+                            ملفات المشروع
+                        </a>
+                        <a href="#" class="resource-item">
+                            <i class="fas fa-link"></i>
+                            روابط مفيدة
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script src="{{ url_for('static', filename='js/lesson_player.js') }}"></script>
+</body>
+</html>

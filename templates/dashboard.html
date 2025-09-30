@@ -115,52 +115,37 @@
             <section class="enrolled-courses glass-card">
                 <div class="card-header">
                     <h2><i class="fas fa-book-open"></i> الدورات المسجلة</h2>
+                    <a href="{{ url_for('courses') }}" class="view-all-btn">عرض جميع الدورات</a>
                 </div>
                 <div class="courses-list">
-                    <div class="course-item">
-                        <div class="course-info">
-                            <h4>مقدمة في البرمجة</h4>
-                            <p><i class="fas fa-user-tie"></i> أ. سارة</p>
-                            <p><i class="fas fa-calendar"></i> 01/01/2025 إلى 01/03/2025</p>
-                            <span class="status-badge completed">مكتملة</span>
-                        </div>
-                        <div class="progress-section">
-                            <div class="progress-bar">
-                                <div class="progress-fill" data-progress="100"></div>
+                    {% if enrollments %}
+                        {% for enrollment, course in enrollments %}
+                        <div class="course-item">
+                            <div class="course-info">
+                                <h4>{{ course.title_ar }}</h4>
+                                <p><i class="fas fa-user-tie"></i> {{ course.instructor_ar }}</p>
+                                <p><i class="fas fa-calendar"></i> انضممت في {{ enrollment.enrollment_date.strftime('%Y/%m/%d') }}</p>
+                                <span class="status-badge {% if enrollment.progress_percentage == 100 %}completed{% elif enrollment.progress_percentage > 0 %}in-progress{% else %}not-started{% endif %}">
+                                    {% if enrollment.progress_percentage == 100 %}مكتملة{% elif enrollment.progress_percentage > 0 %}جارية{% else %}لم تبدأ{% endif %}
+                                </span>
                             </div>
-                            <span class="progress-text">100%</span>
-                        </div>
-                    </div>
-                    
-                    <div class="course-item">
-                        <div class="course-info">
-                            <h4>أمن الشبكات</h4>
-                            <p><i class="fas fa-user-tie"></i> أ. محمد</p>
-                            <p><i class="fas fa-calendar"></i> 05/03/2025 إلى 05/06/2025</p>
-                            <span class="status-badge in-progress">جارية</span>
-                        </div>
-                        <div class="progress-section">
-                            <div class="progress-bar">
-                                <div class="progress-fill" data-progress="65"></div>
+                            <div class="progress-section">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" data-progress="{{ enrollment.progress_percentage }}"></div>
+                                </div>
+                                <span class="progress-text">{{ enrollment.progress_percentage }}%</span>
                             </div>
-                            <span class="progress-text">65%</span>
+                            <a href="{{ url_for('course_detail', course_id=course.id) }}" class="continue-btn">متابعة التعلم</a>
                         </div>
-                    </div>
-                    
-                    <div class="course-item">
-                        <div class="course-info">
-                            <h4>أساسيات الذكاء الاصطناعي</h4>
-                            <p><i class="fas fa-user-tie"></i> د. خالد</p>
-                            <p><i class="fas fa-calendar"></i> 10/06/2025 إلى 10/09/2025</p>
-                            <span class="status-badge not-started">لم تبدأ</span>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-icon">📚</div>
+                            <h4>لم تسجل في أي دورة بعد</h4>
+                            <p>ابدأ رحلتك التعليمية واستكشف دوراتنا المتنوعة</p>
+                            <a href="{{ url_for('courses') }}" class="cta-btn">استكشف الدورات</a>
                         </div>
-                        <div class="progress-section">
-                            <div class="progress-bar">
-                                <div class="progress-fill" data-progress="0"></div>
-                            </div>
-                            <span class="progress-text">0%</span>
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
             </section>
 
@@ -231,34 +216,55 @@
             <section class="suggested-courses glass-card">
                 <div class="card-header">
                     <h2><i class="fas fa-lightbulb"></i> الدورات المقترحة</h2>
+                    <a href="{{ url_for('courses') }}" class="view-all-btn">عرض الكل</a>
                 </div>
                 <div class="suggested-courses-grid">
-                    <div class="suggested-course">
-                        <div class="course-icon">
-                            <i class="fas fa-code"></i>
+                    {% if available_courses %}
+                        {% for course in available_courses %}
+                        <div class="suggested-course">
+                            <div class="course-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <h4>{{ course.title_ar }}</h4>
+                            <p>{{ course.instructor_ar }}</p>
+                            <div class="course-price">
+                                {% if course.price > 0 %}
+                                    {{ course.price }} ج.م
+                                {% else %}
+                                    مجاني
+                                {% endif %}
+                            </div>
+                            <a href="{{ url_for('course_detail', course_id=course.id) }}" class="enroll-btn">عرض التفاصيل</a>
                         </div>
-                        <h4>تطوير تطبيقات الويب</h4>
-                        <p>أ. ليلى</p>
-                        <button class="enroll-btn">سجّل الآن</button>
-                    </div>
-                    
-                    <div class="suggested-course">
-                        <div class="course-icon">
-                            <i class="fas fa-child"></i>
+                        {% endfor %}
+                    {% else %}
+                        <div class="suggested-course">
+                            <div class="course-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <h4>تطوير تطبيقات الويب</h4>
+                            <p>أ. ليلى</p>
+                            <button class="enroll-btn">سجّل الآن</button>
                         </div>
-                        <h4>البرمجة للأطفال</h4>
-                        <p>أ. سامي</p>
-                        <button class="enroll-btn">سجّل الآن</button>
-                    </div>
-                    
-                    <div class="suggested-course">
-                        <div class="course-icon">
-                            <i class="fas fa-chart-bar"></i>
+                        
+                        <div class="suggested-course">
+                            <div class="course-icon">
+                                <i class="fas fa-child"></i>
+                            </div>
+                            <h4>البرمجة للأطفال</h4>
+                            <p>أ. سامي</p>
+                            <button class="enroll-btn">سجّل الآن</button>
                         </div>
-                        <h4>تحليل البيانات</h4>
-                        <p>د. عمار</p>
-                        <button class="enroll-btn">سجّل الآن</button>
-                    </div>
+                        
+                        <div class="suggested-course">
+                            <div class="course-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <h4>تحليل البيانات</h4>
+                            <p>د. عمار</p>
+                            <button class="enroll-btn">سجّل الآن</button>
+                        </div>
+                    {% endif %}
                 </div>
             </section>
         </div>
