@@ -223,14 +223,14 @@
                                     
                                     <div class="enrollment-buttons">
                                         <button class="btn-primary" onclick="showEnrollmentForm()">اشترك الآن</button>
-                                        {% for module in modules %}
-                                            {% for lesson in module.lessons %}
+                                        {% set found_free_lesson = false %}
+                                        {% for module in modules if not found_free_lesson %}
+                                            {% for lesson in module.lessons if not found_free_lesson %}
                                                 {% if lesson.is_free %}
                                                     <button class="btn-secondary" onclick="previewLesson({{ lesson.id }})">معاينة مجانية</button>
-                                                    {% break %}
+                                                    {% set found_free_lesson = true %}
                                                 {% endif %}
                                             {% endfor %}
-                                            {% if lesson.is_free %}{% break %}{% endif %}
                                         {% endfor %}
                                     </div>
                                 </div>
