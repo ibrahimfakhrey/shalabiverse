@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}نظام المصادقة - شلبي فيرس{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/auth.css') }}" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% include 'error_messages.html' %}
+    
+    <!-- Hero Background with Enhanced Animations -->
+    <div class="hero-background">
+        <!-- Binary Rain Effect -->
+        <div class="binary-rain"></div>
+        
+        <!-- Tech Particles -->
+        <div class="tech-particles"></div>
+        
+        <!-- Geometric Shapes -->
+        <div class="geometric-shapes">
+            <div class="shape shape-triangle"></div>
+            <div class="shape shape-circle"></div>
+            <div class="shape shape-square"></div>
+            <div class="shape shape-hexagon"></div>
+            <div class="shape shape-diamond"></div>
+        </div>
+        
+        <!-- Floating Code Snippets -->
+        <div class="code-snippets">
+            <div class="code-snippet">console.log('Hello World');</div>
+            <div class="code-snippet">function authenticate() {}</div>
+            <div class="code-snippet">const user = await login();</div>
+            <div class="code-snippet">if (isValid) return true;</div>
+            <div class="code-snippet">import { auth } from 'firebase';</div>
+        </div>
+        
+        <!-- Animated Grid -->
+        <div class="animated-grid">
+            <div class="grid-line horizontal"></div>
+            <div class="grid-line horizontal"></div>
+            <div class="grid-line horizontal"></div>
+            <div class="grid-line vertical"></div>
+            <div class="grid-line vertical"></div>
+            <div class="grid-line vertical"></div>
+        </div>
+        
+        <!-- Pulsing Dots -->
+        <div class="pulsing-dots">
+            <div class="dot dot-1"></div>
+            <div class="dot dot-2"></div>
+            <div class="dot dot-3"></div>
+            <div class="dot dot-4"></div>
+            <div class="dot dot-5"></div>
+        </div>
+        
+        <!-- IT Concepts Layer -->
+        <div class="it-concepts-layer">
+            <!-- Data Flow Container -->
+            <div class="data-flow-container">
+                <!-- Network Topology -->
+                <svg class="network-topology" viewBox="0 0 1200 800">
+                    <g class="network-nodes">
+                        <circle cx="200" cy="150" r="8" class="node primary-node"/>
+                        <circle cx="400" cy="100" r="6" class="node secondary-node"/>
+                        <circle cx="600" cy="200" r="8" class="node primary-node"/>
+                        <circle cx="800" cy="120" r="6" class="node secondary-node"/>
+                        <circle cx="1000" cy="180" r="8" class="node primary-node"/>
+                        <circle cx="300" cy="300" r="6" class="node secondary-node"/>
+                        <circle cx="700" cy="350" r="8" class="node primary-node"/>
+                        <circle cx="500" cy="400" r="6" class="node secondary-node"/>
+                    </g>
+                    <g class="network-connections">
+                        <line x1="200" y1="150" x2="400" y2="100" class="connection"/>
+                        <line x1="400" y1="100" x2="600" y2="200" class="connection"/>
+                        <line x1="600" y1="200" x2="800" y2="120" class="connection"/>
+                        <line x1="800" y1="120" x2="1000" y2="180" class="connection"/>
+                        <line x1="200" y1="150" x2="300" y2="300" class="connection"/>
+                        <line x1="600" y1="200" x2="700" y2="350" class="connection"/>
+                        <line x1="700" y1="350" x2="500" y2="400" class="connection"/>
+                        <line x1="300" y1="300" x2="500" y2="400" class="connection"/>
+                    </g>
+                    
+                    <!-- Data Pulses -->
+                    <circle class="data-pulse" cx="200" cy="150" r="3" fill="var(--vivid-emerald)"/>
+                    <circle class="data-pulse" cx="400" cy="100" r="3" fill="var(--sky-blue)"/>
+                    <circle class="data-pulse" cx="600" cy="200" r="3" fill="var(--sunset-orange)"/>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Floating Tech Elements -->
+        <div class="floating-elements">
+            <div class="floating-icon" data-tech="code"><i class="fas fa-laptop-code"></i></div>
+            <div class="floating-icon" data-tech="ai"><i class="fas fa-robot"></i></div>
+            <div class="floating-icon" data-tech="team"><i class="fas fa-users"></i></div>
+            <div class="floating-icon" data-tech="security"><i class="fas fa-shield-alt"></i></div>
+            <div class="floating-icon" data-tech="mobile"><i class="fas fa-mobile-alt"></i></div>
+            <div class="floating-icon" data-tech="database"><i class="fas fa-database"></i></div>
+            <div class="floating-icon" data-tech="cloud"><i class="fas fa-cloud"></i></div>
+            <div class="floating-icon" data-tech="network"><i class="fas fa-network-wired"></i></div>
+        </div>
+        
+        <!-- Interactive Circuit Lines -->
+        <div class="circuit-lines">
+            <svg class="circuit-svg" viewBox="0 0 1200 800">
+                <path class="circuit-path" d="M0,400 Q300,200 600,400 T1200,400" stroke="url(#circuitGradient)" stroke-width="2" fill="none"/>
+                <path class="circuit-path" d="M0,200 Q400,100 800,200 T1200,200" stroke="url(#circuitGradient)" stroke-width="1.5" fill="none"/>
+                <path class="circuit-path" d="M0,600 Q200,500 400,600 T800,600 Q1000,500 1200,600" stroke="url(#circuitGradient)" stroke-width="1" fill="none"/>
+                <defs>
+                    <linearGradient id="circuitGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#2563eb;stop-opacity:0"/>
+                        <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:0.8"/>
+                        <stop offset="100%" style="stop-color:#2563eb;stop-opacity:0"/>
+                    </linearGradient>
+                </defs>
+                <circle class="circuit-node" cx="300" cy="300" r="4" fill="#10b981"/>
+                <circle class="circuit-node" cx="600" cy="400" r="4" fill="#f59e0b"/>
+                <circle class="circuit-node" cx="900" cy="250" r="4" fill="#f97316"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="auth-container">
+        <div class="auth-header">
+            <img src="{{ url_for('static', filename='Logo 500 (2).jpg') }}" alt="Shalabiverse Logo" class="auth-logo">
+            <h1>{% block header %}نظام المصادقة - شلبي فيرس{% endblock %}</h1>
+            <p>{% block subtitle %}منصة المصادقة الآمنة{% endblock %}</p>
+        </div>
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form validation and UX enhancements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading state to forms
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function() {
+                    const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.classList.add('loading');
+                        submitBtn.disabled = true;
+                    }
+                });
+            });
+
+            // Input focus effects
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('focused');
+                });
+            });
+
+            // Initialize hero background animations
+            initHeroAnimations();
+        });
+
+        // Hero background animations
+        function initHeroAnimations() {
+            // Binary Rain Effect with enhanced variety
+            const binaryRain = document.querySelector('.binary-rain');
+            if (binaryRain) {
+                for (let i = 0; i < 60; i++) {
+                    const digit = document.createElement('div');
+                    digit.className = 'binary-digit';
+                    digit.textContent = Math.random() > 0.5 ? '1' : '0';
+                    digit.style.left = Math.random() * 100 + '%';
+                    digit.style.animationDelay = Math.random() * 10 + 's';
+                    digit.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                    digit.style.fontSize = (Math.random() * 8 + 12) + 'px';
+                    binaryRain.appendChild(digit);
+                }
+            }
+
+            // Enhanced Tech Particles with varied colors
+            const techParticles = document.querySelector('.tech-particles');
+            if (techParticles) {
+                const colors = [
+                    'var(--accent-mint)',
+                    'var(--sky-blue)',
+                    'var(--sunset-orange)',
+                    'var(--tangerine)'
+                ];
+                
+                for (let i = 0; i < 40; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'tech-particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 15 + 's';
+                    particle.style.animationDuration = (Math.random() * 6 + 10) + 's';
+                    
+                    // Random color selection
+                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.background = `radial-gradient(circle, ${randomColor} 0%, transparent 70%)`;
+                    
+                    techParticles.appendChild(particle);
+                }
+            }
+
+            // Enhanced floating elements with staggered animations
+            const floatingElements = document.querySelectorAll('.floating-icon');
+            floatingElements.forEach((element, index) => {
+                // Ensure proper positioning
+                const positions = [
+                    { top: '15%', left: '8%' },
+                    { top: '65%', left: '85%' },
+                    { top: '25%', left: '75%' },
+                    { top: '75%', left: '15%' },
+                    { top: '45%', left: '55%' },
+                    { top: '10%', left: '45%' },
+                    { top: '80%', left: '60%' },
+                    { top: '35%', left: '25%' }
+                ];
+                
+                if (positions[index]) {
+                    element.style.top = positions[index].top;
+                    element.style.left = positions[index].left;
+                }
+                
+                // Add interactive hover effects
+                element.addEventListener('mouseenter', function() {
+                    this.style.animationPlayState = 'paused';
+                    this.style.transform = 'scale(1.4) rotate(20deg)';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    this.style.animationPlayState = 'running';
+                    this.style.transform = '';
+                });
+            });
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

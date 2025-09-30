@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شلبي فيرس - Shalabiverse | تعليم وتدريب تقني</title>
+    <meta name="description" content="منصة شلبي فيرس لتعليم التقنية والبرمجة والذكاء الاصطناعي بخطوات بسيطة وواضحة للكبار والأطفال">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Language Toggle -->
+    <div class="language-toggle">
+        <button id="langToggle" class="lang-btn">
+            <i class="fas fa-globe"></i>
+            <span id="langText">English</span>
+        </button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <img src="{{ url_for('static', filename='Logo 500 (2).jpg') }}" alt="Shalabiverse Logo" class="brand-logo">
+                <span class="brand-text" data-ar="شلبي فيرس" data-en="Shalabiverse">شلبي فيرس</span>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link" data-ar="الرئيسية" data-en="Home">الرئيسية</a>
+                <a href="#services" class="nav-link" data-ar="البرامج" data-en="Programs">البرامج</a>
+                <a href="#about" class="nav-link" data-ar="من نحن" data-en="About">من نحن</a>
+                <a href="#roadmap" class="nav-link" data-ar="خارطة الطريق" data-en="Roadmap">خارطة الطريق</a>
+                <a href="#testimonials" class="nav-link" data-ar="آراء الطلاب" data-en="Testimonials">آراء الطلاب</a>
+                <a href="#team" class="nav-link" data-ar="الفريق" data-en="Team">الفريق</a>
+                <a href="#contact" class="nav-link" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</a>
+                <a href="#consultation" class="nav-cta" data-ar="احجز استشارة مجانية" data-en="Free Consultation">احجز استشارة مجانية</a>
+                
+                <!-- Mobile Auth Buttons -->
+                <div class="nav-auth-mobile">
+                    <a href="{{ url_for('login') }}" class="auth-btn login-btn" data-ar="تسجيل الدخول" data-en="Login">تسجيل الدخول</a>
+                    <a href="{{ url_for('register') }}" class="auth-btn register-btn" data-ar="إنشاء حساب" data-en="Register">إنشاء حساب</a>
+                </div>
+            </div>
+            
+            <div class="nav-auth">
+                <a href="{{ url_for('login') }}" class="auth-btn login-btn" data-ar="تسجيل الدخول" data-en="Login">تسجيل الدخول</a>
+                <a href="{{ url_for('register') }}" class="auth-btn register-btn" data-ar="إنشاء حساب" data-en="Register">إنشاء حساب</a>
+            </div>
+            
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-background">
+            <!-- Binary Rain Effect -->
+            <div class="binary-rain" id="binaryRain"></div>
+            
+            <!-- Tech Particles -->
+            <div class="tech-particles" id="techParticles"></div>
+            
+            <!-- IT Concept Visualizations -->
+            <div class="it-concepts-layer">
+                <!-- Data Flow Animation -->
+                <div class="data-flow-container" id="dataFlowContainer">
+                    <div class="server-node">
+                        <i class="fas fa-server"></i>
+                        <span class="node-label" data-ar="خادم" data-en="Server">خادم</span>
+                    </div>
+                    <div class="client-nodes">
+                        <div class="client-node">
+                            <i class="fas fa-laptop"></i>
+                            <span class="node-label" data-ar="حاسوب" data-en="Computer">حاسوب</span>
+                        </div>
+                        <div class="client-node">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span class="node-label" data-ar="هاتف" data-en="Mobile">هاتف</span>
+                        </div>
+                        <div class="client-node">
+                            <i class="fas fa-tablet-alt"></i>
+                            <span class="node-label" data-ar="تابلت" data-en="Tablet">تابلت</span>
+                        </div>
+                    </div>
+                    <div class="data-packets"></div>
+                </div>
+                
+                <!-- Network Topology -->
+                <div class="network-topology" id="networkTopology">
+                    <svg class="topology-svg" viewBox="0 0 800 600">
+                        <!-- Network Connections -->
+                        <g class="network-connections">
+                            <line class="connection-line" x1="400" y1="100" x2="200" y2="300" stroke="var(--accent-mint)" stroke-width="2"/>
+                            <line class="connection-line" x1="400" y1="100" x2="600" y2="300" stroke="var(--accent-mint)" stroke-width="2"/>
+                            <line class="connection-line" x1="200" y1="300" x2="100" y2="500" stroke="var(--sky-blue)" stroke-width="1.5"/>
+                            <line class="connection-line" x1="200" y1="300" x2="300" y2="500" stroke="var(--sky-blue)" stroke-width="1.5"/>
+                            <line class="connection-line" x1="600" y1="300" x2="500" y2="500" stroke="var(--sky-blue)" stroke-width="1.5"/>
+                            <line class="connection-line" x1="600" y1="300" x2="700" y2="500" stroke="var(--sky-blue)" stroke-width="1.5"/>
+                        </g>
+                        
+                        <!-- Network Nodes -->
+                        <g class="network-nodes">
+                            <!-- Core Router -->
+                            <circle class="network-node core" cx="400" cy="100" r="25" fill="var(--primary-sapphire)"/>
+                            <text x="400" y="105" text-anchor="middle" fill="white" font-size="12">Core</text>
+                            
+                            <!-- Edge Routers -->
+                            <circle class="network-node edge" cx="200" cy="300" r="20" fill="var(--cta-emerald)"/>
+                            <text x="200" y="305" text-anchor="middle" fill="white" font-size="10">Edge</text>
+                            
+                            <circle class="network-node edge" cx="600" cy="300" r="20" fill="var(--cta-emerald)"/>
+                            <text x="600" y="305" text-anchor="middle" fill="white" font-size="10">Edge</text>
+                            
+                            <!-- End Devices -->
+                            <circle class="network-node device" cx="100" cy="500" r="15" fill="var(--accent-orange)"/>
+                            <circle class="network-node device" cx="300" cy="500" r="15" fill="var(--accent-orange)"/>
+                            <circle class="network-node device" cx="500" cy="500" r="15" fill="var(--accent-orange)"/>
+                            <circle class="network-node device" cx="700" cy="500" r="15" fill="var(--accent-orange)"/>
+                        </g>
+                        
+                        <!-- Data Pulse Animation -->
+                        <g class="data-pulses">
+                            <circle class="data-pulse" r="3" fill="var(--vivid-emerald)">
+                                <animateMotion dur="3s" repeatCount="indefinite">
+                                    <path d="M400,100 L200,300 L100,500"/>
+                                </animateMotion>
+                            </circle>
+                            <circle class="data-pulse" r="3" fill="var(--sunset-orange)">
+                                <animateMotion dur="3s" repeatCount="indefinite" begin="1s">
+                                    <path d="M400,100 L600,300 L700,500"/>
+                                </animateMotion>
+                            </circle>
+                        </g>
+                    </svg>
+                </div>
+                
+                <!-- Security Shield Animation -->
+                <div class="security-visualization" id="securityViz">
+                    <div class="security-shield">
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="shield-layers">
+                            <div class="shield-layer firewall" data-label="Firewall"></div>
+                            <div class="shield-layer encryption" data-label="Encryption"></div>
+                            <div class="shield-layer authentication" data-label="Auth"></div>
+                        </div>
+                    </div>
+                    <div class="threat-indicators">
+                        <div class="threat blocked">
+                            <i class="fas fa-bug"></i>
+                            <span class="threat-label" data-ar="تهديد محجوب" data-en="Threat Blocked">تهديد محجوب</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Database Operations -->
+                <div class="database-visualization" id="databaseViz">
+                    <div class="database-stack">
+                        <div class="db-layer"></div>
+                        <div class="db-layer"></div>
+                        <div class="db-layer"></div>
+                        <div class="db-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                    </div>
+                    <div class="db-operations">
+                        <div class="db-operation create">
+                            <span data-ar="إنشاء" data-en="CREATE">إنشاء</span>
+                        </div>
+                        <div class="db-operation read">
+                            <span data-ar="قراءة" data-en="READ">قراءة</span>
+                        </div>
+                        <div class="db-operation update">
+                            <span data-ar="تحديث" data-en="UPDATE">تحديث</span>
+                        </div>
+                        <div class="db-operation delete">
+                            <span data-ar="حذف" data-en="DELETE">حذف</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cloud Computing Visualization -->
+                <div class="cloud-visualization" id="cloudViz">
+                    <div class="cloud-container">
+                        <div class="cloud-shape">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <div class="cloud-services">
+                            <div class="service-node storage">
+                                <i class="fas fa-hdd"></i>
+                                <span data-ar="تخزين" data-en="Storage">تخزين</span>
+                            </div>
+                            <div class="service-node compute">
+                                <i class="fas fa-microchip"></i>
+                                <span data-ar="معالجة" data-en="Compute">معالجة</span>
+                            </div>
+                            <div class="service-node network">
+                                <i class="fas fa-network-wired"></i>
+                                <span data-ar="شبكة" data-en="Network">شبكة</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Floating Tech Elements -->
+            <div class="floating-elements">
+                <div class="floating-icon" data-tech="code"><i class="fas fa-laptop-code"></i></div>
+                <div class="floating-icon" data-tech="ai"><i class="fas fa-robot"></i></div>
+                <div class="floating-icon" data-tech="team"><i class="fas fa-users"></i></div>
+                <div class="floating-icon" data-tech="security"><i class="fas fa-shield-alt"></i></div>
+                <div class="floating-icon" data-tech="mobile"><i class="fas fa-mobile-alt"></i></div>
+                <div class="floating-icon" data-tech="database"><i class="fas fa-database"></i></div>
+                <div class="floating-icon" data-tech="cloud"><i class="fas fa-cloud"></i></div>
+                <div class="floating-icon" data-tech="network"><i class="fas fa-network-wired"></i></div>
+            </div>
+            
+            <!-- Interactive Circuit Lines -->
+            <div class="circuit-lines">
+                <svg class="circuit-svg" viewBox="0 0 1200 800">
+                    <path class="circuit-path" d="M0,400 Q300,200 600,400 T1200,400" stroke="url(#circuitGradient)" stroke-width="2" fill="none"/>
+                    <path class="circuit-path" d="M0,200 Q400,100 800,200 T1200,200" stroke="url(#circuitGradient)" stroke-width="1.5" fill="none"/>
+                    <path class="circuit-path" d="M0,600 Q200,500 400,600 T800,600 Q1000,500 1200,600" stroke="url(#circuitGradient)" stroke-width="1" fill="none"/>
+                    <defs>
+                        <linearGradient id="circuitGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:var(--sapphire-blue);stop-opacity:0"/>
+                            <stop offset="50%" style="stop-color:var(--sky-blue);stop-opacity:0.8"/>
+                            <stop offset="100%" style="stop-color:var(--sapphire-blue);stop-opacity:0"/>
+                        </linearGradient>
+                    </defs>
+                    <circle class="circuit-node" cx="300" cy="300" r="4" fill="var(--vivid-emerald)"/>
+                    <circle class="circuit-node" cx="600" cy="400" r="4" fill="var(--sunset-orange)"/>
+                    <circle class="circuit-node" cx="900" cy="250" r="4" fill="var(--tangerine)"/>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span class="title-main" data-ar="تعليم وتدريب تقني" data-en="Technology Education & Training">تعليم وتدريب تقني</span>
+                        <span class="title-sub" data-ar="شلبي فيرس" data-en="Shalabiverse">شلبي فيرس</span>
+                    </h1>
+                    <p class="hero-subtitle" data-ar="اتعلم الكمبيوتر والتقنية بخطوات بسيطة وواضحة" data-en="Learn computers and technology with simple, clear steps">اتعلم الكمبيوتر والتقنية بخطوات بسيطة وواضحة</p>
+                    <p class="hero-description" data-ar="منصة تعليمية شاملة للكبار والأطفال تقدم دورات في البرمجة والذكاء الاصطناعي وتطوير المواقع والتطبيقات وأمن المعلومات" data-en="A comprehensive educational platform for adults and children offering courses in programming, AI, web/app development, and cybersecurity">منصة تعليمية شاملة للكبار والأطفال تقدم دورات في البرمجة والذكاء الاصطناعي وتطوير المواقع والتطبيقات وأمن المعلومات</p>
+                    
+                    <div class="hero-cta">
+                        <a href="#consultation" class="btn btn-primary" data-ar="احجز استشارة مجانية" data-en="Book Free Consultation">
+                            <i class="fas fa-calendar-check"></i>
+                            احجز استشارة مجانية
+                        </a>
+                        <a href="#services" class="btn btn-secondary" data-ar="استكشف البرامج" data-en="Explore Programs">
+                            <i class="fas fa-arrow-down"></i>
+                            استكشف البرامج
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="hero-illustration">
+                    <div class="family-learning">
+                        <!-- Enhanced Code Editor Simulation -->
+                        <div class="code-editor">
+                            <div class="editor-header">
+                                <div class="editor-tabs">
+                                    <div class="tab active">index.html</div>
+                                    <div class="tab">style.css</div>
+                                    <div class="tab">script.js</div>
+                                </div>
+                                <div class="editor-controls">
+                                    <div class="control minimize"></div>
+                                    <div class="control maximize"></div>
+                                    <div class="control close"></div>
+                                </div>
+                            </div>
+                            <div class="editor-content">
+                                <div class="line-numbers">
+                                    <span>1</span>
+                                    <span>2</span>
+                                    <span>3</span>
+                                    <span>4</span>
+                                    <span>5</span>
+                                    <span>6</span>
+                                    <span>7</span>
+                                    <span>8</span>
+                                </div>
+                                <div class="code-area">
+                                    <div class="code-line">
+                                        <span class="syntax-tag">&lt;html&gt;</span>
+                                    </div>
+                                    <div class="code-line">
+                                        <span class="syntax-tag">&lt;head&gt;</span>
+                                    </div>
+                                    <div class="code-line">
+                                        <span class="syntax-tag">&lt;title&gt;</span><span class="syntax-string">Shalabiverse</span><span class="syntax-tag">&lt;/title&gt;</span>
+                                    </div>
+                                    <div class="code-line">
+                                        <span class="syntax-tag">&lt;/head&gt;</span>
+                                    </div>
+                                    <div class="code-line">
+                                        <span class="syntax-tag">&lt;body&gt;</span>
+                                    </div>
+                                    <div class="code-line">
+                                        <span class="syntax-tag">&lt;h1&gt;</span><span class="syntax-string">مرحبا بالعالم!</span><span class="syntax-tag">&lt;/h1&gt;</span>
+                                    </div>
+                                    <div class="code-line">
+                                        <span class="syntax-tag">&lt;/body&gt;</span>
+                                    </div>
+                                    <div class="code-line">
+                                        <span class="syntax-tag">&lt;/html&gt;</span>
+                                    </div>
+                                </div>
+                                <div class="typing-cursor"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Animated Family Members -->
+                        <div class="family-members">
+                            <div class="member adult">
+                                <i class="fas fa-user"></i>
+                                <div class="thought-bubble">
+                                    <span data-ar="أتعلم البرمجة!" data-en="Learning to code!">أتعلم البرمجة!</span>
+                                </div>
+                            </div>
+                            <div class="member child">
+                                <i class="fas fa-child"></i>
+                                <div class="thought-bubble">
+                                    <span data-ar="ممتع جداً!" data-en="So fun!">ممتع جداً!</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Floating Code Snippets -->
+                        <div class="floating-code-snippets">
+                            <div class="code-snippet" data-lang="html">
+                                <span>&lt;div&gt;Hello World&lt;/div&gt;</span>
+                            </div>
+                            <div class="code-snippet" data-lang="css">
+                                <span>.hero { background: linear-gradient(); }</span>
+                            </div>
+                            <div class="code-snippet" data-lang="js">
+                                <span>console.log('مرحبا!');</span>
+                            </div>
+                            <div class="code-snippet" data-lang="python">
+                                <span>print("Hello, World!")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services/Programs Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-ar="برامجنا التعليمية" data-en="Our Educational Programs">برامجنا التعليمية</h2>
+                <p class="section-subtitle" data-ar="تعلم التقنية من الصفر إلى الاحتراف مع خبراء متخصصين" data-en="Learn technology from zero to professional with specialized experts">تعلم التقنية من الصفر إلى الاحتراف مع خبراء متخصصين</p>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-card" data-aos="fade-up">
+                    <div class="service-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="service-title" data-ar="تطوير المواقع والتطبيقات" data-en="Website & App Development">تطوير المواقع والتطبيقات</h3>
+                    <p class="service-description" data-ar="تعلم إنشاء مواقع الويب والتطبيقات الذكية باستخدام أحدث التقنيات والأدوات البرمجية" data-en="Learn to create websites and smart applications using the latest technologies and programming tools">تعلم إنشاء مواقع الويب والتطبيقات الذكية باستخدام أحدث التقنيات والأدوات البرمجية</p>
+                    <div class="service-features">
+                        <span class="feature-tag" data-ar="HTML/CSS" data-en="HTML/CSS">HTML/CSS</span>
+                        <span class="feature-tag" data-ar="JavaScript" data-en="JavaScript">JavaScript</span>
+                        <span class="feature-tag" data-ar="React" data-en="React">React</span>
+                        <span class="feature-tag" data-ar="Node.js" data-en="Node.js">Node.js</span>
+                    </div>
+                </div>
+                
+                <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="service-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="service-title" data-ar="البنية التحتية الآمنة لتقنية المعلومات" data-en="Secure IT Infrastructure">البنية التحتية الآمنة لتقنية المعلومات</h3>
+                    <p class="service-description" data-ar="دورات شاملة في أمن الشبكات والأنظمة وحماية البيانات والأمن السيبراني" data-en="Comprehensive courses in network security, systems, data protection, and cybersecurity">دورات شاملة في أمن الشبكات والأنظمة وحماية البيانات والأمن السيبراني</p>
+                    <div class="service-features">
+                        <span class="feature-tag" data-ar="أمن الشبكات" data-en="Network Security">أمن الشبكات</span>
+                        <span class="feature-tag" data-ar="حماية البيانات" data-en="Data Protection">حماية البيانات</span>
+                        <span class="feature-tag" data-ar="الأمن السيبراني" data-en="Cybersecurity">الأمن السيبراني</span>
+                    </div>
+                </div>
+                
+                <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="service-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="service-title" data-ar="البرمجة والذكاء الاصطناعي" data-en="Coding & AI Training">البرمجة والذكاء الاصطناعي</h3>
+                    <p class="service-description" data-ar="تعلم لغات البرمجة المختلفة وتقنيات الذكاء الاصطناعي وتعلم الآلة" data-en="Learn various programming languages and artificial intelligence and machine learning techniques">تعلم لغات البرمجة المختلفة وتقنيات الذكاء الاصطناعي وتعلم الآلة</p>
+                    <div class="service-features">
+                        <span class="feature-tag" data-ar="Python" data-en="Python">Python</span>
+                        <span class="feature-tag" data-ar="تعلم الآلة" data-en="Machine Learning">تعلم الآلة</span>
+                        <span class="feature-tag" data-ar="الذكاء الاصطناعي" data-en="AI">الذكاء الاصطناعي</span>
+                    </div>
+                </div>
+                
+                <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="service-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="service-title" data-ar="ورش عملية للكبار والأطفال" data-en="Practical Workshops for Adults & Kids">ورش عملية للكبار والأطفال</h3>
+                    <p class="service-description" data-ar="ورش تفاعلية مصممة خصيصاً لجميع الأعمار مع مناهج مبسطة وأنشطة عملية" data-en="Interactive workshops specially designed for all ages with simplified curricula and practical activities">ورش تفاعلية مصممة خصيصاً لجميع الأعمار مع مناهج مبسطة وأنشطة عملية</p>
+                    <div class="service-features">
+                        <span class="feature-tag" data-ar="للأطفال" data-en="For Kids">للأطفال</span>
+                        <span class="feature-tag" data-ar="للكبار" data-en="For Adults">للكبار</span>
+                        <span class="feature-tag" data-ar="تفاعلية" data-en="Interactive">تفاعلية</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="section-title" data-ar="من نحن" data-en="About Us">من نحن</h2>
+                    <p class="about-description" data-ar="شلبي فيرس منصة تعليمية رائدة تهدف إلى تبسيط تعلم التقنية والبرمجة للجميع. نؤمن بأن التعليم التقني يجب أن يكون متاحاً وواضحاً ومفهوماً لكل الأعمار والخلفيات التعليمية." data-en="Shalabiverse is a leading educational platform that aims to simplify technology and programming learning for everyone. We believe that technical education should be accessible, clear, and understandable for all ages and educational backgrounds.">شلبي فيرس منصة تعليمية رائدة تهدف إلى تبسيط تعلم التقنية والبرمجة للجميع. نؤمن بأن التعليم التقني يجب أن يكون متاحاً وواضحاً ومفهوماً لكل الأعمار والخلفيات التعليمية.</p>
+                    
+                    <div class="values-grid">
+                        <div class="value-item">
+                            <div class="value-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <h3 data-ar="التبسيط والوضوح" data-en="Simplicity & Clarity">التبسيط والوضوح</h3>
+                            <p data-ar="نقدم المحتوى التقني بطريقة مبسطة وواضحة" data-en="We present technical content in a simplified and clear way">نقدم المحتوى التقني بطريقة مبسطة وواضحة</p>
+                        </div>
+                        
+                        <div class="value-item">
+                            <div class="value-icon">
+                                <i class="fas fa-hands-helping"></i>
+                            </div>
+                            <h3 data-ar="التعلم التفاعلي" data-en="Interactive Learning">التعلم التفاعلي</h3>
+                            <p data-ar="ورش عملية وأنشطة تفاعلية لضمان الفهم العميق" data-en="Practical workshops and interactive activities to ensure deep understanding">ورش عملية وأنشطة تفاعلية لضمان الفهم العميق</p>
+                        </div>
+                        
+                        <div class="value-item">
+                            <div class="value-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h3 data-ar="التعليم للجميع" data-en="Education for All">التعليم للجميع</h3>
+                            <p data-ar="برامج مصممة لجميع الأعمار والمستويات التعليمية" data-en="Programs designed for all ages and educational levels">برامج مصممة لجميع الأعمار والمستويات التعليمية</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="500">0</div>
+                        <div class="stat-label" data-ar="طالب متخرج" data-en="Graduated Students">طالب متخرج</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="50">0</div>
+                        <div class="stat-label" data-ar="دورة تدريبية" data-en="Training Courses">دورة تدريبية</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="15">0</div>
+                        <div class="stat-label" data-ar="مدرب خبير" data-en="Expert Trainers">مدرب خبير</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="98">0</div>
+                        <div class="stat-label" data-ar="% نسبة الرضا" data-en="% Satisfaction Rate">% نسبة الرضا</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="roadmap">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-ar="خارطة الطريق التعليمية" data-en="Educational Roadmap">خارطة الطريق التعليمية</h2>
+                <p class="section-subtitle" data-ar="رحلة التعلم والنمو في عالم التقنية" data-en="The journey of learning and growth in the world of technology">رحلة التعلم والنمو في عالم التقنية</p>
+            </div>
+            
+            <div class="roadmap-timeline">
+                <div class="timeline-item" data-aos="fade-right">
+                    <div class="timeline-content">
+                        <div class="timeline-icon">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <h3 data-ar="المرحلة الأولى: الأساسيات" data-en="Phase 1: Fundamentals">المرحلة الأولى: الأساسيات</h3>
+                        <p data-ar="تعلم أساسيات الكمبيوتر والإنترنت والبرمجة" data-en="Learn computer, internet, and programming fundamentals">تعلم أساسيات الكمبيوتر والإنترنت والبرمجة</p>
+                        <div class="timeline-status completed" data-ar="مكتملة" data-en="Completed">مكتملة</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item" data-aos="fade-left">
+                    <div class="timeline-content">
+                        <div class="timeline-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3 data-ar="المرحلة الثانية: البرمجة المتقدمة" data-en="Phase 2: Advanced Programming">المرحلة الثانية: البرمجة المتقدمة</h3>
+                        <p data-ar="تطوير مهارات البرمجة وإنشاء المشاريع العملية" data-en="Develop programming skills and create practical projects">تطوير مهارات البرمجة وإنشاء المشاريع العملية</p>
+                        <div class="timeline-status in-progress" data-ar="قيد التنفيذ" data-en="In Progress">قيد التنفيذ</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item" data-aos="fade-right">
+                    <div class="timeline-content">
+                        <div class="timeline-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3 data-ar="المرحلة الثالثة: الذكاء الاصطناعي" data-en="Phase 3: Artificial Intelligence">المرحلة الثالثة: الذكاء الاصطناعي</h3>
+                        <p data-ar="استكشاف عالم الذكاء الاصطناعي وتعلم الآلة" data-en="Explore the world of artificial intelligence and machine learning">استكشاف عالم الذكاء الاصطناعي وتعلم الآلة</p>
+                        <div class="timeline-status upcoming" data-ar="قادمة" data-en="Upcoming">قادمة</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item" data-aos="fade-left">
+                    <div class="timeline-content">
+                        <div class="timeline-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3 data-ar="المرحلة الرابعة: الاحتراف" data-en="Phase 4: Professionalism">المرحلة الرابعة: الاحتراف</h3>
+                        <p data-ar="التخصص المهني والحصول على الشهادات المعتمدة" data-en="Professional specialization and obtaining certified credentials">التخصص المهني والحصول على الشهادات المعتمدة</p>
+                        <div class="timeline-status upcoming" data-ar="قادمة" data-en="Upcoming">قادمة</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-ar="آراء طلابنا" data-en="Student Testimonials">آراء طلابنا</h2>
+                <p class="section-subtitle" data-ar="ماذا يقول طلابنا عن تجربتهم التعليمية معنا" data-en="What our students say about their learning experience with us">ماذا يقول طلابنا عن تجربتهم التعليمية معنا</p>
+            </div>
+            
+            <div class="testimonials-slider" id="testimonialsSlider">
+                <div class="testimonial-card active">
+                    <div class="testimonial-content">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text" data-ar="تجربة رائعة! تعلمت البرمجة من الصفر وأصبحت قادراً على إنشاء مواقع ويب احترافية. الشرح واضح والمدربون متعاونون جداً." data-en="Amazing experience! I learned programming from scratch and became able to create professional websites. The explanation is clear and the trainers are very cooperative.">"تجربة رائعة! تعلمت البرمجة من الصفر وأصبحت قادراً على إنشاء مواقع ويب احترافية. الشرح واضح والمدربون متعاونون جداً."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="author-info">
+                                <h4 class="author-name" data-ar="أحمد محمد" data-en="Ahmed Mohammed">أحمد محمد</h4>
+                                <p class="author-role" data-ar="مطور ويب" data-en="Web Developer">مطور ويب</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text" data-ar="ابنتي تحب دورات البرمجة للأطفال. الطريقة التفاعلية والألعاب التعليمية جعلت التعلم ممتعاً وسهلاً بالنسبة لها." data-en="My daughter loves the programming courses for children. The interactive method and educational games made learning fun and easy for her.">"ابنتي تحب دورات البرمجة للأطفال. الطريقة التفاعلية والألعاب التعليمية جعلت التعلم ممتعاً وسهلاً بالنسبة لها."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="author-info">
+                                <h4 class="author-name" data-ar="فاطمة علي" data-en="Fatima Ali">فاطمة علي</h4>
+                                <p class="author-role" data-ar="أم طالبة" data-en="Student's Mother">أم طالبة</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text" data-ar="دورة أمن المعلومات غيرت مساري المهني تماماً. حصلت على وظيفة ممتازة في مجال الأمن السيبراني بفضل المهارات التي تعلمتها هنا." data-en="The information security course completely changed my career path. I got an excellent job in cybersecurity thanks to the skills I learned here.">"دورة أمن المعلومات غيرت مساري المهني تماماً. حصلت على وظيفة ممتازة في مجال الأمن السيبراني بفضل المهارات التي تعلمتها هنا."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="author-info">
+                                <h4 class="author-name" data-ar="سارة أحمد" data-en="Sarah Ahmed">سارة أحمد</h4>
+                                <p class="author-role" data-ar="مختصة أمن سيبراني" data-en="Cybersecurity Specialist">مختصة أمن سيبراني</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonials-controls">
+                <button class="testimonial-btn prev" id="prevTestimonial">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <div class="testimonials-dots" id="testimonialsDots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+                <button class="testimonial-btn next" id="nextTestimonial">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="team">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-ar="فريق الخبراء" data-en="Expert Team">فريق الخبراء</h2>
+                <p class="section-subtitle" data-ar="تعرف على المدربين والخبراء الذين سيرافقونك في رحلة التعلم" data-en="Meet the trainers and experts who will accompany you on your learning journey">تعرف على المدربين والخبراء الذين سيرافقونك في رحلة التعلم</p>
+            </div>
+            
+            <div class="team-grid">
+                <div class="team-member" data-aos="fade-up">
+                    <div class="member-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name" data-ar="د. محمد شلبي" data-en="Dr. Mohammed Shalabi">د. محمد شلبي</h3>
+                        <p class="member-role" data-ar="مؤسس ومدير تنفيذي" data-en="Founder & CEO">مؤسس ومدير تنفيذي</p>
+                        <p class="member-bio" data-ar="خبير في تطوير البرمجيات والذكاء الاصطناعي مع أكثر من 15 عاماً من الخبرة في التعليم التقني" data-en="Expert in software development and artificial intelligence with over 15 years of experience in technical education">خبير في تطوير البرمجيات والذكاء الاصطناعي مع أكثر من 15 عاماً من الخبرة في التعليم التقني</p>
+                        <div class="member-social">
+                            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-member" data-aos="fade-up" data-aos-delay="100">
+                    <div class="member-avatar">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name" data-ar="أ. نور الدين أحمد" data-en="Prof. Nour Aldin Ahmed">أ. نور الدين أحمد</h3>
+                        <p class="member-role" data-ar="مدرب أمن المعلومات" data-en="Information Security Trainer">مدرب أمن المعلومات</p>
+                        <p class="member-bio" data-ar="متخصص في الأمن السيبراني وحماية البيانات مع شهادات دولية معتمدة" data-en="Specialist in cybersecurity and data protection with certified international credentials">متخصص في الأمن السيبراني وحماية البيانات مع شهادات دولية معتمدة</p>
+                        <div class="member-social">
+                            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-member" data-aos="fade-up" data-aos-delay="200">
+                    <div class="member-avatar">
+                        <i class="fas fa-user-cog"></i>
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name" data-ar="م. ليلى حسن" data-en="Eng. Layla Hassan">م. ليلى حسن</h3>
+                        <p class="member-role" data-ar="مدربة تطوير الويب" data-en="Web Development Trainer">مدربة تطوير الويب</p>
+                        <p class="member-bio" data-ar="مطورة ويب محترفة ومتخصصة في تعليم البرمجة للأطفال والمبتدئين" data-en="Professional web developer specialized in teaching programming to children and beginners">مطورة ويب محترفة ومتخصصة في تعليم البرمجة للأطفال والمبتدئين</p>
+                        <div class="member-social">
+                            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & FAQ Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h2 class="section-title" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا</h2>
+                    <p class="contact-description" data-ar="هل لديك أسئلة؟ نحن هنا لمساعدتك في رحلة التعلم" data-en="Do you have questions? We're here to help you on your learning journey">هل لديك أسئلة؟ نحن هنا لمساعدتك في رحلة التعلم</p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div class="method-info">
+                                <h4 data-ar="واتساب" data-en="WhatsApp">واتساب</h4>
+                                <p>+966 50 123 4567</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="method-info">
+                                <h4 data-ar="البريد الإلكتروني" data-en="Email">البريد الإلكتروني</h4>
+                                <p>info@shalabiverse.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="method-info">
+                                <h4 data-ar="الهاتف" data-en="Phone">الهاتف</h4>
+                                <p>+966 11 456 7890</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="contact-form-container">
+                    <form class="contact-form" id="contactForm">
+                        <h3 data-ar="احجز استشارة مجانية" data-en="Book Free Consultation">احجز استشارة مجانية</h3>
+                        
+                        <div class="form-group">
+                            <label for="name" data-ar="الاسم الكامل" data-en="Full Name">الاسم الكامل</label>
+                            <input type="text" id="name" name="name" required>
+                            <span class="error-message"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" data-ar="البريد الإلكتروني" data-en="Email">البريد الإلكتروني</label>
+                            <input type="email" id="email" name="email" required>
+                            <span class="error-message"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone" data-ar="رقم الهاتف" data-en="Phone Number">رقم الهاتف</label>
+                            <input type="tel" id="phone" name="phone" required>
+                            <span class="error-message"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="program" data-ar="البرنامج المهتم به" data-en="Program of Interest">البرنامج المهتم به</label>
+                            <select id="program" name="program" required>
+                                <option value="" data-ar="اختر البرنامج" data-en="Select Program">اختر البرنامج</option>
+                                <option value="web-dev" data-ar="تطوير المواقع والتطبيقات" data-en="Web & App Development">تطوير المواقع والتطبيقات</option>
+                                <option value="security" data-ar="أمن المعلومات" data-en="Information Security">أمن المعلومات</option>
+                                <option value="ai" data-ar="الذكاء الاصطناعي" data-en="Artificial Intelligence">الذكاء الاصطناعي</option>
+                                <option value="kids" data-ar="برامج الأطفال" data-en="Kids Programs">برامج الأطفال</option>
+                            </select>
+                            <span class="error-message"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message" data-ar="رسالتك" data-en="Your Message">رسالتك</label>
+                            <textarea id="message" name="message" rows="4" placeholder="أخبرنا عن أهدافك التعليمية..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            <span data-ar="إرسال الطلب" data-en="Send Request">إرسال الطلب</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="consultation" class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-ar="الأسئلة الشائعة" data-en="Frequently Asked Questions">الأسئلة الشائعة</h2>
+                <p class="section-subtitle" data-ar="إجابات على أكثر الأسئلة شيوعاً حول برامجنا التعليمية" data-en="Answers to the most common questions about our educational programs">إجابات على أكثر الأسئلة شيوعاً حول برامجنا التعليمية</p>
+            </div>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3 data-ar="هل البرامج مناسبة للمبتدئين تماماً؟" data-en="Are the programs suitable for complete beginners?">هل البرامج مناسبة للمبتدئين تماماً؟</h3>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-ar="نعم، جميع برامجنا مصممة للبدء من الصفر. نقدم شرحاً مبسطاً ومتدرجاً يناسب جميع المستويات، حتى لو لم تكن لديك أي خبرة سابقة في التقنية." data-en="Yes, all our programs are designed to start from scratch. We provide simplified and gradual explanations suitable for all levels, even if you have no previous experience in technology.">نعم، جميع برامجنا مصممة للبدء من الصفر. نقدم شرحاً مبسطاً ومتدرجاً يناسب جميع المستويات، حتى لو لم تكن لديك أي خبرة سابقة في التقنية.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3 data-ar="كم تستغرق الدورة التدريبية؟" data-en="How long does the training course take?">كم تستغرق الدورة التدريبية؟</h3>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-ar="تختلف مدة الدورات حسب البرنامج والمستوى. الدورات الأساسية تستغرق من 4-8 أسابيع، بينما البرامج المتقدمة قد تستغرق 3-6 أشهر. يمكنك التعلم بالسرعة التي تناسبك." data-en="Course duration varies by program and level. Basic courses take 4-8 weeks, while advanced programs may take 3-6 months. You can learn at your own pace.">تختلف مدة الدورات حسب البرنامج والمستوى. الدورات الأساسية تستغرق من 4-8 أسابيع، بينما البرامج المتقدمة قد تستغرق 3-6 أشهر. يمكنك التعلم بالسرعة التي تناسبك.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3 data-ar="هل يمكنني الحصول على شهادة معتمدة؟" data-en="Can I get a certified certificate?">هل يمكنني الحصول على شهادة معتمدة؟</h3>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-ar="نعم، نقدم شهادات إتمام معتمدة لجميع برامجنا. كما نساعدك في الحصول على شهادات دولية معترف بها في مجال تخصصك." data-en="Yes, we provide certified completion certificates for all our programs. We also help you obtain internationally recognized certificates in your field of specialization.">نعم، نقدم شهادات إتمام معتمدة لجميع برامجنا. كما نساعدك في الحصول على شهادات دولية معترف بها في مجال تخصصك.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3 data-ar="هل التعليم أونلاين أم حضوري؟" data-en="Is the education online or in-person?">هل التعليم أونلاين أم حضوري؟</h3>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-ar="نقدم كلا الخيارين! يمكنك اختيار التعلم أونلاين من منزلك أو حضور الدورات في مراكزنا التدريبية. كما نقدم نموذجاً مختلطاً يجمع بين الاثنين." data-en="We offer both options! You can choose to learn online from home or attend courses at our training centers. We also offer a hybrid model that combines both.">نقدم كلا الخيارين! يمكنك اختيار التعلم أونلاين من منزلك أو حضور الدورات في مراكزنا التدريبية. كما نقدم نموذجاً مختلطاً يجمع بين الاثنين.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3 data-ar="ما هي تكلفة البرامج التدريبية؟" data-en="What is the cost of training programs?">ما هي تكلفة البرامج التدريبية؟</h3>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-ar="تختلف التكلفة حسب البرنامج والمدة. نقدم خطط دفع مرنة وخصومات للطلاب والعائلات. احجز استشارة مجانية لمعرفة التفاصيل والعروض المتاحة." data-en="Cost varies by program and duration. We offer flexible payment plans and discounts for students and families. Book a free consultation to learn about details and available offers.">تختلف التكلفة حسب البرنامج والمدة. نقدم خطط دفع مرنة وخصومات للطلاب والعائلات. احجز استشارة مجانية لمعرفة التفاصيل والعروض المتاحة.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <img src="{{ url_for('static', filename='Logo 500 (2).jpg') }}" alt="Shalabiverse Logo" class="footer-logo">
+                        <span class="brand-text" data-ar="شلبي فيرس" data-en="Shalabiverse">شلبي فيرس</span>
+                    </div>
+                    <p class="footer-description" data-ar="منصة تعليمية رائدة لتعلم التقنية والبرمجة بطريقة مبسطة وواضحة للجميع" data-en="A leading educational platform for learning technology and programming in a simplified and clear way for everyone">منصة تعليمية رائدة لتعلم التقنية والبرمجة بطريقة مبسطة وواضحة للجميع</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-title" data-ar="البرامج" data-en="Programs">البرامج</h4>
+                    <ul class="footer-links">
+                        <li><a href="#services" data-ar="تطوير المواقع" data-en="Web Development">تطوير المواقع</a></li>
+                        <li><a href="#services" data-ar="أمن المعلومات" data-en="Information Security">أمن المعلومات</a></li>
+                        <li><a href="#services" data-ar="الذكاء الاصطناعي" data-en="Artificial Intelligence">الذكاء الاصطناعي</a></li>
+                        <li><a href="#services" data-ar="برامج الأطفال" data-en="Kids Programs">برامج الأطفال</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-title" data-ar="روابط مهمة" data-en="Important Links">روابط مهمة</h4>
+                    <ul class="footer-links">
+                        <li><a href="#about" data-ar="من نحن" data-en="About Us">من نحن</a></li>
+                        <li><a href="#team" data-ar="الفريق" data-en="Team">الفريق</a></li>
+                        <li><a href="#consultation" data-ar="الأسئلة الشائعة" data-en="FAQ">الأسئلة الشائعة</a></li>
+                        <li><a href="#contact" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-title" data-ar="معلومات قانونية" data-en="Legal Information">معلومات قانونية</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" data-ar="سياسة الخصوصية" data-en="Privacy Policy">سياسة الخصوصية</a></li>
+                        <li><a href="#" data-ar="شروط الاستخدام" data-en="Terms of Use">شروط الاستخدام</a></li>
+                        <li><a href="#" data-ar="سياسة الاسترداد" data-en="Refund Policy">سياسة الاسترداد</a></li>
+                    </ul>
+                    <div class="security-badges">
+                        <div class="badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span data-ar="آمن ومحمي" data-en="Safe & Secure">آمن ومحمي</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p data-ar="© 2024 شلبي فيرس. جميع الحقوق محفوظة." data-en="© 2024 Shalabiverse. All rights reserved.">© 2024 شلبي فيرس. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - شلبي فيرس</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='Logo 500 (2).jpg') }}" alt="Shalabiverse Logo" class="dashboard-logo">
+                <span>شلبي فيرس</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item active">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>الرئيسية</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    <span>ملف المستخدم</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-book"></i>
+                    <span>الدورات</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-bell"></i>
+                    <span>الإشعارات</span>
+                    <span class="notification-badge">3</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-headset"></i>
+                    <span>الدعم</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+                <span>الوضع الليلي</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <h1>مرحباً، أحمد الشلابي</h1>
+                <p>استمر في رحلتك التعليمية</p>
+            </div>
+            <div class="header-right">
+                <button class="profile-update-btn">
+                    <i class="fas fa-edit"></i>
+                    تحديث الملف الشخصي
+                </button>
+                <div class="user-avatar">
+                    <img src="https://via.placeholder.com/50x50/276EF1/FFFFFF?text=أ" alt="صورة المستخدم">
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- User Info Card -->
+            <section class="user-info-card glass-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-user-circle"></i> معلومات المستخدم</h2>
+                </div>
+                <div class="user-details">
+                    <div class="user-avatar-large">
+                        <img src="https://via.placeholder.com/80x80/276EF1/FFFFFF?text=أ" alt="صورة المستخدم">
+                    </div>
+                    <div class="user-info">
+                        <h3>أحمد الشلابي</h3>
+                        <div class="info-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>ahmad@shalabiverse.com</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-phone"></i>
+                            <span>0521234567</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-star"></i>
+                            <span class="level-badge professional">محترف</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Enrolled Courses -->
+            <section class="enrolled-courses glass-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-book-open"></i> الدورات المسجلة</h2>
+                </div>
+                <div class="courses-list">
+                    <div class="course-item">
+                        <div class="course-info">
+                            <h4>مقدمة في البرمجة</h4>
+                            <p><i class="fas fa-user-tie"></i> أ. سارة</p>
+                            <p><i class="fas fa-calendar"></i> 01/01/2025 إلى 01/03/2025</p>
+                            <span class="status-badge completed">مكتملة</span>
+                        </div>
+                        <div class="progress-section">
+                            <div class="progress-bar">
+                                <div class="progress-fill" data-progress="100"></div>
+                            </div>
+                            <span class="progress-text">100%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="course-item">
+                        <div class="course-info">
+                            <h4>أمن الشبكات</h4>
+                            <p><i class="fas fa-user-tie"></i> أ. محمد</p>
+                            <p><i class="fas fa-calendar"></i> 05/03/2025 إلى 05/06/2025</p>
+                            <span class="status-badge in-progress">جارية</span>
+                        </div>
+                        <div class="progress-section">
+                            <div class="progress-bar">
+                                <div class="progress-fill" data-progress="65"></div>
+                            </div>
+                            <span class="progress-text">65%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="course-item">
+                        <div class="course-info">
+                            <h4>أساسيات الذكاء الاصطناعي</h4>
+                            <p><i class="fas fa-user-tie"></i> د. خالد</p>
+                            <p><i class="fas fa-calendar"></i> 10/06/2025 إلى 10/09/2025</p>
+                            <span class="status-badge not-started">لم تبدأ</span>
+                        </div>
+                        <div class="progress-section">
+                            <div class="progress-bar">
+                                <div class="progress-fill" data-progress="0"></div>
+                            </div>
+                            <span class="progress-text">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notifications -->
+            <section class="notifications glass-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-bell"></i> الإشعارات</h2>
+                </div>
+                <div class="notifications-list">
+                    <div class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="notification-content">
+                            <h4>لديك واجب جديد في دورة أمن الشبكات</h4>
+                            <span class="notification-date">28/09/2025</span>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="notification-content">
+                            <h4>تم قبول طلب استشارة تقنية</h4>
+                            <span class="notification-date">25/09/2025</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Activities -->
+            <section class="activities glass-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-history"></i> أنشطتي</h2>
+                </div>
+                <div class="activities-list">
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p>تسليم واجب في دورة مقدمة في البرمجة</p>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-reply"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p>رد على استشارتك التقنية</p>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p>سجلت في دورة أساسيات الذكاء الاصطناعي</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Suggested Courses -->
+            <section class="suggested-courses glass-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-lightbulb"></i> الدورات المقترحة</h2>
+                </div>
+                <div class="suggested-courses-grid">
+                    <div class="suggested-course">
+                        <div class="course-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h4>تطوير تطبيقات الويب</h4>
+                        <p>أ. ليلى</p>
+                        <button class="enroll-btn">سجّل الآن</button>
+                    </div>
+                    
+                    <div class="suggested-course">
+                        <div class="course-icon">
+                            <i class="fas fa-child"></i>
+                        </div>
+                        <h4>البرمجة للأطفال</h4>
+                        <p>أ. سامي</p>
+                        <button class="enroll-btn">سجّل الآن</button>
+                    </div>
+                    
+                    <div class="suggested-course">
+                        <div class="course-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h4>تحليل البيانات</h4>
+                        <p>د. عمار</p>
+                        <button class="enroll-btn">سجّل الآن</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Background Effects -->
+    <div class="background-effects">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        <div class="grid-pattern"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
