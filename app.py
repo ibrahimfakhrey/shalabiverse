@@ -266,134 +266,145 @@ def get_user_by_username_or_email(username_or_email):
 
 def get_user_stats(user):
     """Get user statistics for dashboard"""
-    # Get actual enrolled courses count
-    courses_enrolled = Enrollment.query.filter_by(user_id=user.id, is_active=True).count()
-    
-    # Calculate total study hours from completed lessons
-    total_study_minutes = db.session.query(db.func.sum(Lesson.duration_minutes)).join(
-        LessonProgress, Lesson.id == LessonProgress.lesson_id
-    ).join(
-        Enrollment, LessonProgress.enrollment_id == Enrollment.id
-    ).filter(
-        Enrollment.user_id == user.id,
-        LessonProgress.is_completed == True
-    ).scalar() or 0
-    
-    study_hours = round(total_study_minutes / 60, 1)
-    
-    # Calculate achievements (completed courses + milestones)
-    completed_courses = Enrollment.query.filter_by(
-        user_id=user.id, 
-        is_active=True
-    ).filter(Enrollment.progress_percentage >= 100).count()
-    
-    # Achievement milestones: first course, 5 hours study, 10 hours study, etc.
-    achievements = completed_courses
-    if study_hours >= 5:
-        achievements += 1
-    if study_hours >= 10:
-        achievements += 1
-    if study_hours >= 25:
-        achievements += 1
-    if study_hours >= 50:
-        achievements += 1
-    if courses_enrolled >= 3:
-        achievements += 1
-    
-    # Calculate points (100 per completed lesson + 500 per completed course)
-    completed_lessons = LessonProgress.query.join(
-        Enrollment, LessonProgress.enrollment_id == Enrollment.id
-    ).filter(
-        Enrollment.user_id == user.id,
-        LessonProgress.is_completed == True
-    ).count()
-    
-    points = (completed_lessons * 100) + (completed_courses * 500)
-    
-    return {
-        'courses_enrolled': courses_enrolled,
-        'achievements': achievements,
-        'study_hours': study_hours,
-        'points': points
-    }
+    try:
+        # Get actual enrolled courses count
+        courses_enrolled = Enrollment.query.filter_by(user_id=user.id, is_active=True).count()
+        
+        # Calculate total study hours from completed lessons
+        total_study_minutes = db.session.query(db.func.sum(Lesson.duration_minutes)).join(
+            LessonProgress, Lesson.id == LessonProgress.lesson_id
+        ).join(
+            Enrollment, LessonProgress.enrollment_id == Enrollment.id
+        ).filter(
+            Enrollment.user_id == user.id,
+            LessonProgress.is_completed == True
+        ).scalar() or 0
+        
+        study_hours = round(total_study_minutes / 60, 1)
+        
+        # Calculate achievements (completed courses + milestones)
+        completed_courses = Enrollment.query.filter_by(
+            user_id=user.id, 
+            is_active=True
+        ).filter(Enrollment.progress_percentage >= 100).count()
+        
+        # Achievement milestones: first course, 5 hours study, 10 hours study, etc.
+        achievements = completed_courses
+        if study_hours >= 5:
+            achievements += 1
+        if study_hours >= 10:
+            achievements += 1
+        if study_hours >= 25:
+            achievements += 1
+        if study_hours >= 50:
+            achievements += 1
+        
+        # Calculate points (simple scoring system)
+        points = (completed_courses * 100) + (int(study_hours) * 10) + (achievements * 25)
+        
+        return {
+            'courses_enrolled': courses_enrolled,
+            'study_hours': study_hours,
+            'achievements': achievements,
+            'points': points
+        }
+    except Exception as e:
+        print(f"Error getting user stats: {e}")
+        # Return default values if database query fails
+        return {
+            'courses_enrolled': 0,
+            'study_hours': 0.0,
+            'achievements': 0,
+            'points': 0
+        }
 
 def get_recent_activities(user):
     """Get recent user activities"""
-    activities = []
-    
-    # Get recent lesson completions
-    recent_completions = db.session.query(
-        LessonProgress, Lesson, Course
-    ).join(
-        Lesson, LessonProgress.lesson_id == Lesson.id
-    ).join(
-        Enrollment, LessonProgress.enrollment_id == Enrollment.id
-    ).join(
-        Course, Enrollment.course_id == Course.id
-    ).filter(
-        Enrollment.user_id == user.id,
-        LessonProgress.is_completed == True,
-        LessonProgress.completed_at.isnot(None)
-    ).order_by(
-        LessonProgress.completed_at.desc()
-    ).limit(5).all()
-    
-    for progress, lesson, course in recent_completions:
-        time_diff = datetime.utcnow() - progress.completed_at
-        if time_diff.days == 0:
-            if time_diff.seconds < 3600:
-                time_str = f"{time_diff.seconds // 60} دقيقة مضت"
+    try:
+        activities = []
+        
+        # Get recent lesson completions
+        recent_completions = db.session.query(
+            LessonProgress, Lesson, Course
+        ).join(
+            Lesson, LessonProgress.lesson_id == Lesson.id
+        ).join(
+            Enrollment, LessonProgress.enrollment_id == Enrollment.id
+        ).join(
+            Course, Enrollment.course_id == Course.id
+        ).filter(
+            Enrollment.user_id == user.id,
+            LessonProgress.is_completed == True,
+            LessonProgress.completed_at.isnot(None)
+        ).order_by(
+            LessonProgress.completed_at.desc()
+        ).limit(5).all()
+        
+        for progress, lesson, course in recent_completions:
+            time_diff = datetime.utcnow() - progress.completed_at
+            if time_diff.days == 0:
+                if time_diff.seconds < 3600:
+                    time_str = f"{time_diff.seconds // 60} دقيقة مضت"
+                else:
+                    time_str = f"{time_diff.seconds // 3600} ساعة مضت"
             else:
-                time_str = f"{time_diff.seconds // 3600} ساعة مضت"
-        else:
-            time_str = f"{time_diff.days} يوم مضى"
-            
-        activities.append({
-            'icon': 'fa-check-circle',
-            'description': f'أكمل درس "{lesson.title_ar}" في كورس "{course.title_ar}"',
-            'timestamp': time_str
-        })
-    
-    # Get recent enrollments
-    recent_enrollments = db.session.query(
-        Enrollment, Course
-    ).join(
-        Course, Enrollment.course_id == Course.id
-    ).filter(
-        Enrollment.user_id == user.id
-    ).order_by(
-        Enrollment.enrolled_at.desc()
-    ).limit(3).all()
-    
-    for enrollment, course in recent_enrollments:
-        time_diff = datetime.utcnow() - enrollment.enrolled_at
-        if time_diff.days == 0:
-            if time_diff.seconds < 3600:
-                time_str = f"{time_diff.seconds // 60} دقيقة مضت"
+                time_str = f"{time_diff.days} يوم مضى"
+                
+            activities.append({
+                'icon': 'fa-check-circle',
+                'description': f'أكمل درس "{lesson.title_ar}" في كورس "{course.title_ar}"',
+                'timestamp': time_str
+            })
+        
+        # Get recent enrollments
+        recent_enrollments = db.session.query(
+            Enrollment, Course
+        ).join(
+            Course, Enrollment.course_id == Course.id
+        ).filter(
+            Enrollment.user_id == user.id
+        ).order_by(
+            Enrollment.enrolled_at.desc()
+        ).limit(3).all()
+        
+        for enrollment, course in recent_enrollments:
+            time_diff = datetime.utcnow() - enrollment.enrolled_at
+            if time_diff.days == 0:
+                if time_diff.seconds < 3600:
+                    time_str = f"{time_diff.seconds // 60} دقيقة مضت"
+                else:
+                    time_str = f"{time_diff.seconds // 3600} ساعة مضت"
             else:
-                time_str = f"{time_diff.seconds // 3600} ساعة مضت"
-        else:
-            time_str = f"{time_diff.days} يوم مضى"
-            
-        activities.append({
-            'icon': 'fa-book-open',
-            'description': f'انضم إلى كورس "{course.title_ar}"',
-            'timestamp': time_str
-        })
-    
-    # Sort all activities by most recent and limit to 5
-    # Since we can't sort mixed datetime objects easily, we'll use a simple approach
-    # In a real implementation, you might want to add a unified activity log table
-    
-    # If no activities, show welcome message
-    if not activities:
-        activities.append({
+                time_str = f"{time_diff.days} يوم مضى"
+                
+            activities.append({
+                'icon': 'fa-book-open',
+                'description': f'انضم إلى كورس "{course.title_ar}"',
+                'timestamp': time_str
+            })
+        
+        # Sort all activities by most recent and limit to 5
+        # Since we can't sort mixed datetime objects easily, we'll use a simple approach
+        # In a real implementation, you might want to add a unified activity log table
+        
+        # If no activities, show welcome message
+        if not activities:
+            activities.append({
+                'icon': 'fa-star',
+                'description': 'مرحباً بك في شلبي فيرس! ابدأ رحلتك التعليمية الآن',
+                'timestamp': 'الآن'
+            })
+        
+        return activities[:5]  # Return max 5 activities
+        
+    except Exception as e:
+        print(f"Error getting recent activities: {e}")
+        # Return default activities if database query fails
+        return [{
             'icon': 'fa-star',
             'description': 'مرحباً بك في شلبي فيرس! ابدأ رحلتك التعليمية الآن',
             'timestamp': 'الآن'
-        })
-    
-    return activities[:5]  # Return max 5 activities
+        }]
 
 # Session Management
 class CurrentUser:
@@ -714,17 +725,29 @@ def internal_error(error):
 # Database initialization
 def init_db():
     """Initialize database tables"""
-    with app.app_context():
+    try:
+        with app.app_context():
+            db.create_all()
+            print("Database tables created successfully!")
+            
+            # Add fake course data if no courses exist
+            if Course.query.count() == 0:
+                add_fake_courses()
+            
+            # Add test users if no users exist
+            if User.query.count() == 0:
+                add_test_users()
+    except Exception as e:
+        print(f"Error initializing database: {e}")
+        # Don't raise the exception to prevent app from crashing
+
+# Initialize database on app startup (for production)
+with app.app_context():
+    try:
         db.create_all()
-        print("Database tables created successfully!")
-        
-        # Add fake course data if no courses exist
-        if Course.query.count() == 0:
-            add_fake_courses()
-        
-        # Add test users if no users exist
-        if User.query.count() == 0:
-            add_test_users()
+        print("Database tables created on startup!")
+    except Exception as e:
+        print(f"Error creating tables on startup: {e}")
 
 def add_fake_courses():
     """Add fake course data for testing and demonstration"""
