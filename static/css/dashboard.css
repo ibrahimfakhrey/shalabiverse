@@ -130,7 +130,7 @@
     --frost-gray: #334155;
     --sky-blue: #1e293b;
     
-    --bg-primary: linear-gradient(135deg, #001a5c 0%, var(--deep-blue) 100%);
+    --bg-primary: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     --bg-secondary: var(--deep-blue);
     --bg-card: rgba(0, 35, 121, 0.85);
     --bg-card-hover: rgba(0, 35, 121, 0.95);

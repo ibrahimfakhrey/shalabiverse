@@ -717,51 +717,129 @@ body::after {
 
 .form-input {
     width: 100%;
-    padding: 1rem 1rem 1rem 3rem;
-    border: 2px solid var(--border-light);
-    border-radius: 12px;
+    padding: 1.25rem 1.25rem 1.25rem 3.5rem;
+    border: 2px solid rgba(255, 159, 102, 0.2);
+    border-radius: 16px;
     font-size: 1rem;
-    transition: all 0.3s ease;
-    background: rgba(255, 250, 230, 0.5);
+    font-weight: 500;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(145deg, rgba(255, 250, 230, 0.95), rgba(255, 250, 230, 0.85));
     color: var(--deep-blue);
+    box-shadow: 
+        0 4px 12px rgba(255, 159, 102, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -1px 0 rgba(255, 159, 102, 0.1);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
 }
 
 .form-input:focus {
     outline: none;
-    border-color: var(--warm-orange);
-    box-shadow: 0 0 0 3px rgba(255, 159, 102, 0.1);
-    background: rgba(255, 250, 230, 0.8);
+    border-color: var(--bright-orange);
+    box-shadow: 
+        0 0 0 4px rgba(255, 95, 0, 0.15),
+        0 8px 25px rgba(255, 95, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        inset 0 -1px 0 rgba(255, 95, 0, 0.2);
+    background: linear-gradient(145deg, rgba(255, 250, 230, 1), rgba(255, 250, 230, 0.95));
+    transform: translateY(-2px) scale(1.01);
 }
 
 .form-input::placeholder {
-    color: var(--neutral-charcoal);
-    opacity: 0.7;
+    color: rgba(0, 35, 121, 0.5);
+    opacity: 1;
+    font-weight: 400;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus::placeholder {
+    color: rgba(255, 95, 0, 0.6);
+    transform: translateX(4px);
 }
 
 .input-icon {
     position: absolute;
-    left: 15px;
+    left: 18px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--warm-orange);
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     pointer-events: none;
-    transition: color 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
 }
 
 .form-input:focus + .input-icon {
     color: var(--bright-orange);
+    transform: translateY(-50%) scale(1.1);
+    text-shadow: 0 0 8px rgba(255, 95, 0, 0.3);
 }
 
-/* Error States */
+/* Add modern input hover effects */
+.form-input:hover:not(:focus) {
+    border-color: rgba(255, 159, 102, 0.4);
+    box-shadow: 
+        0 6px 16px rgba(255, 159, 102, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        inset 0 -1px 0 rgba(255, 159, 102, 0.15);
+    transform: translateY(-1px);
+}
+
+/* Add floating label effect */
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: var(--deep-blue);
+    font-size: 0.9rem;
+    letter-spacing: 0.025em;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus ~ .form-label,
+.form-input:not(:placeholder-shown) ~ .form-label {
+    color: var(--bright-orange);
+    transform: translateY(-2px);
+}
+
+/* Enhanced error and success states */
 .form-input.error {
-    border-color: var(--error-red);
-    background: rgba(255, 95, 0, 0.05);
+    border-color: var(--bright-orange);
+    background: linear-gradient(145deg, rgba(255, 95, 0, 0.05), rgba(255, 95, 0, 0.02));
+    animation: shake 0.5s ease-in-out;
 }
 
 .form-input.error:focus {
-    box-shadow: 0 0 0 3px rgba(255, 95, 0, 0.1);
+    box-shadow: 
+        0 0 0 4px rgba(255, 95, 0, 0.2),
+        0 8px 25px rgba(255, 95, 0, 0.15);
 }
+
+.form-input.success {
+    border-color: var(--warm-orange);
+    background: linear-gradient(145deg, rgba(255, 159, 102, 0.05), rgba(255, 159, 102, 0.02));
+}
+
+.form-input.success:focus {
+    box-shadow: 
+        0 0 0 4px rgba(255, 159, 102, 0.2),
+        0 8px 25px rgba(255, 159, 102, 0.15);
+}
+
+/* Shake animation for errors */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+    20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+
 
 .error-message {
     color: var(--error-red);
@@ -876,32 +954,53 @@ body::after {
 /* Submit Button */
 .submit-btn {
     width: 100%;
-    padding: 1rem;
-    background: var(--gradient-primary);
+    padding: 1.25rem 2rem;
+    background: linear-gradient(135deg, var(--bright-orange) 0%, var(--warm-orange) 50%, var(--deep-blue) 100%);
     color: white;
     border: none;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: 600;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    box-shadow: 
+        0 8px 20px rgba(255, 95, 0, 0.25),
+        0 4px 12px rgba(0, 35, 121, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    text-transform: none;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(10px);
 }
 
 .submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px var(--shadow-medium);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+        0 12px 30px rgba(255, 95, 0, 0.35),
+        0 8px 20px rgba(255, 159, 102, 0.25),
+        0 4px 12px rgba(0, 35, 121, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, var(--bright-orange) 0%, var(--warm-orange) 30%, var(--deep-blue) 100%);
+    filter: brightness(1.1) saturate(1.2);
 }
 
 .submit-btn:active {
-    transform: translateY(0);
+    transform: translateY(-1px) scale(0.98);
+    box-shadow: 
+        0 6px 15px rgba(255, 95, 0, 0.3),
+        0 3px 8px rgba(0, 35, 121, 0.2),
+        inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.1s ease;
 }
 
 .submit-btn:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
     transform: none;
+    box-shadow: 0 2px 8px rgba(0, 35, 121, 0.1);
+    background: linear-gradient(135deg, #ccc 0%, #999 100%);
+    filter: grayscale(1);
 }
 
 .submit-btn::before {
@@ -979,25 +1078,33 @@ body::after {
 
 .social-btn {
     flex: 1;
-    padding: 0.875rem;
-    border: 2px solid var(--border-light);
-    border-radius: 12px;
-    background: white;
-    color: var(--neutral-charcoal);
+    padding: 1rem;
+    border: 2px solid rgba(255, 159, 102, 0.3);
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(255, 250, 230, 0.9) 0%, rgba(255, 159, 102, 0.05) 100%);
+    color: var(--deep-blue);
     text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    gap: 0.75rem;
+    font-weight: 600;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 4px 12px rgba(255, 159, 102, 0.15),
+        0 2px 6px rgba(0, 35, 121, 0.08);
+    backdrop-filter: blur(5px);
 }
 
 .social-btn:hover {
-    border-color: var(--warm-orange);
-    background: rgba(255, 159, 102, 0.05);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px var(--shadow-light);
+    border-color: var(--bright-orange);
+    background: linear-gradient(135deg, rgba(255, 250, 230, 1) 0%, rgba(255, 159, 102, 0.15) 100%);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+        0 8px 20px rgba(255, 159, 102, 0.25),
+        0 4px 12px rgba(0, 35, 121, 0.12),
+        0 2px 6px rgba(255, 95, 0, 0.1);
+    color: var(--bright-orange);
 }
 
 .social-btn i {
@@ -1272,37 +1379,37 @@ body::after {
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
     body {
-        background: var(--deep-blue);
+        background: var(--cream-white);
     }
     
     .auth-container {
-        background: rgba(0, 35, 121, 0.95);
+        background: rgba(255, 250, 230, 0.95);
         border: 1px solid rgba(255, 159, 102, 0.2);
     }
     
     .auth-title {
-        color: var(--cream-white);
+        color: var(--neutral-charcoal);
     }
     
     .auth-subtitle,
     .form-label {
-        color: var(--cream-white);
+        color: var(--neutral-charcoal);
     }
     
     .form-input {
-        background: rgba(255, 250, 230, 0.1);
+        background: rgba(255, 250, 230, 0.8);
         border-color: rgba(255, 159, 102, 0.2);
-        color: var(--cream-white);
+        color: var(--neutral-charcoal);
     }
     
     .form-input::placeholder {
-        color: rgba(255, 250, 230, 0.6);
+        color: rgba(0, 35, 121, 0.6);
     }
     
     .social-btn {
-        background: rgba(255, 250, 230, 0.05);
+        background: rgba(255, 250, 230, 0.8);
         border-color: rgba(255, 159, 102, 0.2);
-        color: var(--cream-white);
+        color: var(--neutral-charcoal);
     }
 }
 

@@ -401,7 +401,7 @@ html[dir="rtl"] .nav-link::after {
     display: flex;
     align-items: center;
     position: relative;
-    background: linear-gradient(135deg, var(--primary-sky) 0%, var(--bg-beige) 100%);
+    background: var(--bg-beige);
     overflow: hidden;
 }
 
