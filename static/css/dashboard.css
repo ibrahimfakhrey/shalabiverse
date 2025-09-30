@@ -119,6 +119,10 @@
 
 /* Dark Theme Variables */
 [data-theme="dark"] {
+    --primary-sapphire: var(--warm-orange);
+    --vivid-emerald: var(--bright-orange);
+    --sunset-orange: var(--warm-orange);
+    --rose-pink: var(--bright-orange);
     --soft-beige: #1a1a2e;
     --white: #16213e;
     --text-dark: #e2e8f0;

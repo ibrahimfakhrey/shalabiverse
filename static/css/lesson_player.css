@@ -4,21 +4,27 @@
 
 /* CSS Custom Properties (Variables) */
 :root {
-    /* Colors */
-    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --success-gradient: linear-gradient(135deg, #4CAF50, #45a049);
+    /* ColorHunt Palette: https://colorhunt.co/palette/fffae6ff9f66ff5f00002379 */
+    --cream-white: #FFFAE6;      /* Light cream background */
+    --warm-orange: #FF9F66;      /* Warm orange accent */
+    --bright-orange: #FF5F00;    /* Bright orange primary */
+    --deep-blue: #002379;        /* Deep blue secondary */
+    
+    /* Colors using ColorHunt palette */
+    --primary-gradient: linear-gradient(135deg, var(--deep-blue) 0%, var(--bright-orange) 100%);
+    --success-gradient: linear-gradient(135deg, var(--warm-orange), var(--bright-orange));
     --error-gradient: linear-gradient(135deg, #ff6b6b, #ee5a52);
-    --primary-color: #667eea;
-    --success-color: #4CAF50;
+    --primary-color: var(--deep-blue);
+    --success-color: var(--warm-orange);
     --error-color: #f44336;
-    --text-primary: #2c3e50;
-    --text-secondary: #666;
+    --text-primary: var(--deep-blue);
+    --text-secondary: #4a3728;
     --text-muted: #999;
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8f9fa;
-    --bg-light: #f0f0f0;
-    --border-color: #e9ecef;
-    --border-light: #f0f0f0;
+    --bg-primary: var(--cream-white);
+    --bg-secondary: #f0e6d2;
+    --bg-light: #f0e6d2;
+    --border-color: rgba(0, 35, 121, 0.1);
+    --border-light: rgba(255, 159, 102, 0.2);
     
     /* Spacing */
     --spacing-xs: 0.25rem;
