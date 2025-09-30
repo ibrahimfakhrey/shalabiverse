@@ -440,6 +440,22 @@ class CurrentUser:
 
 def get_current_user():
     user_id = session.get('user_id')
+    if not user_id:
+        return CurrentUser(None)
+    
+    # Validate that the user still exists in the database
+    try:
+        user_exists = User.query.get(user_id) is not None
+        if not user_exists:
+            # User was deleted from database, clear session
+            session.clear()
+            return CurrentUser(None)
+    except Exception as e:
+        print(f"Error validating user in database: {e}")
+        # If database query fails, clear session to be safe
+        session.clear()
+        return CurrentUser(None)
+    
     return CurrentUser(user_id)
 
 # Routes
@@ -597,11 +613,17 @@ def dashboard():
     
     current_user = get_current_user()
     
+    # Check if user exists in database
+    if not current_user.user:
+        flash('User account not found. Please log in again.', 'error')
+        session.clear()
+        return redirect(url_for('login'))
+    
     # Get user enrollments with course details
     enrollments = []
     available_courses = []
     
-    if current_user.user:
+    try:
         enrollments_data = db.session.query(Enrollment, Course).join(Course).filter(
             Enrollment.user_id == current_user.user.id,
             Enrollment.is_active == True
@@ -653,6 +675,12 @@ def dashboard():
             Course.is_active == True,
             ~Course.id.in_(enrolled_course_ids) if enrolled_course_ids else True
         ).limit(6).all()
+        
+    except Exception as e:
+        print(f"Error loading dashboard data: {e}")
+        # Continue with empty data if database queries fail
+        enrollments = []
+        available_courses = []
     
     user_stats = get_user_stats(current_user.user)
     recent_activities = get_recent_activities(current_user.user)
