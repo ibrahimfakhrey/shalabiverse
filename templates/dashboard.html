@@ -66,9 +66,9 @@
     <!-- Main Content -->
     <main class="main-content">
         <!-- Top Header -->
-        <header class="top-header">
+        <header class="top-header dashboard-header">
             <div class="header-left">
-                <h1>مرحباً، أحمد الشلابي</h1>
+                <h1>مرحباً، {{ current_user.username }}</h1>
                 <p>استمر في رحلتك التعليمية</p>
             </div>
             <div class="header-right">
@@ -77,13 +77,58 @@
                     تحديث الملف الشخصي
                 </button>
                 <div class="user-avatar">
-                    <img src="https://via.placeholder.com/50x50/276EF1/FFFFFF?text=أ" alt="صورة المستخدم">
+                    <img src="https://via.placeholder.com/50x50/276EF1/FFFFFF?text={{ current_user.username[0]|upper }}" alt="صورة المستخدم">
                 </div>
             </div>
         </header>
 
         <!-- Dashboard Grid -->
         <div class="dashboard-grid">
+            <!-- Statistics Cards -->
+            <section class="stats-overview">
+                <div class="stats-grid">
+                    <div class="stat-card glass-card" data-stat-type="courses_enrolled">
+                        <div class="stat-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>{{ user_stats.courses_enrolled }}</h3>
+                            <p>الدورات المسجلة</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card glass-card" data-stat-type="study_hours">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>{{ user_stats.study_hours }}</h3>
+                            <p>ساعات الدراسة</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card glass-card" data-stat-type="achievements">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>{{ user_stats.achievements }}</h3>
+                            <p>الإنجازات</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card glass-card" data-stat-type="points">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>{{ user_stats.points }}</h3>
+                            <p>النقاط</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- User Info Card -->
             <section class="user-info-card glass-card">
                 <div class="card-header">
@@ -91,21 +136,29 @@
                 </div>
                 <div class="user-details">
                     <div class="user-avatar-large">
-                        <img src="https://via.placeholder.com/80x80/276EF1/FFFFFF?text=أ" alt="صورة المستخدم">
+                        <img src="https://via.placeholder.com/80x80/276EF1/FFFFFF?text={{ current_user.username[0]|upper }}" alt="صورة المستخدم">
                     </div>
                     <div class="user-info">
-                        <h3>أحمد الشلابي</h3>
+                        <h3>{{ current_user.username }}</h3>
                         <div class="info-item">
                             <i class="fas fa-envelope"></i>
-                            <span>ahmad@shalabiverse.com</span>
+                            <span>{{ current_user.email }}</span>
                         </div>
                         <div class="info-item">
-                            <i class="fas fa-phone"></i>
-                            <span>0521234567</span>
+                            <i class="fas fa-calendar-plus"></i>
+                            <span>انضم في {{ current_user.created_at.strftime('%Y/%m/%d') }}</span>
                         </div>
+                        {% if current_user.last_login %}
+                        <div class="info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>آخر دخول: {{ current_user.last_login.strftime('%Y/%m/%d %H:%M') }}</span>
+                        </div>
+                        {% endif %}
                         <div class="info-item">
                             <i class="fas fa-star"></i>
-                            <span class="level-badge professional">محترف</span>
+                            <span class="level-badge {% if user_stats.courses_enrolled >= 5 %}expert{% elif user_stats.courses_enrolled >= 3 %}advanced{% elif user_stats.courses_enrolled >= 1 %}intermediate{% else %}beginner{% endif %}">
+                                {% if user_stats.courses_enrolled >= 5 %}خبير{% elif user_stats.courses_enrolled >= 3 %}متقدم{% elif user_stats.courses_enrolled >= 1 %}متوسط{% else %}مبتدئ{% endif %}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -155,25 +208,39 @@
                     <h2><i class="fas fa-bell"></i> الإشعارات</h2>
                 </div>
                 <div class="notifications-list">
-                    <div class="notification-item">
-                        <div class="notification-icon">
-                            <i class="fas fa-tasks"></i>
+                    {% if enrollments %}
+                        {% for enrollment, course in enrollments %}
+                            {% if enrollment.progress_percentage < 100 %}
+                            <div class="notification-item">
+                                <div class="notification-icon">
+                                    <i class="fas fa-play-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <h4>متابعة التعلم في {{ course.title_ar }}</h4>
+                                    <span class="notification-date">{{ enrollment.last_accessed.strftime('%d/%m/%Y') if enrollment.last_accessed else 'لم يتم الوصول بعد' }}</span>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if user_stats.achievements > 0 %}
+                        <div class="notification-item">
+                            <div class="notification-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="notification-content">
+                                <h4>تهانينا! لديك {{ user_stats.achievements }} إنجاز</h4>
+                                <span class="notification-date">اليوم</span>
+                            </div>
                         </div>
-                        <div class="notification-content">
-                            <h4>لديك واجب جديد في دورة أمن الشبكات</h4>
-                            <span class="notification-date">28/09/2025</span>
+                        {% endif %}
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-icon">🔔</div>
+                            <h4>لا توجد إشعارات</h4>
+                            <p>سنرسل لك إشعارات عند وجود تحديثات</p>
                         </div>
-                    </div>
-                    
-                    <div class="notification-item">
-                        <div class="notification-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div class="notification-content">
-                            <h4>تم قبول طلب استشارة تقنية</h4>
-                            <span class="notification-date">25/09/2025</span>
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
             </section>
 
@@ -183,32 +250,25 @@
                     <h2><i class="fas fa-history"></i> أنشطتي</h2>
                 </div>
                 <div class="activities-list">
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-upload"></i>
+                    {% if recent_activities %}
+                        {% for activity in recent_activities %}
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas {{ 'fa-play-circle' if activity.type == 'lesson_completed' else 'fa-plus-circle' }}"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>{{ activity.description }}</p>
+                                <span class="activity-time">{{ activity.time_ago }}</span>
+                            </div>
                         </div>
-                        <div class="activity-content">
-                            <p>تسليم واجب في دورة مقدمة في البرمجة</p>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-icon">📋</div>
+                            <h4>لا توجد أنشطة حديثة</h4>
+                            <p>ابدأ بالتعلم لرؤية أنشطتك هنا</p>
                         </div>
-                    </div>
-                    
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-reply"></i>
-                        </div>
-                        <div class="activity-content">
-                            <p>رد على استشارتك التقنية</p>
-                        </div>
-                    </div>
-                    
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-plus-circle"></i>
-                        </div>
-                        <div class="activity-content">
-                            <p>سجلت في دورة أساسيات الذكاء الاصطناعي</p>
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
             </section>
 

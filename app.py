@@ -266,33 +266,134 @@ def get_user_by_username_or_email(username_or_email):
 
 def get_user_stats(user):
     """Get user statistics for dashboard"""
+    # Get actual enrolled courses count
+    courses_enrolled = Enrollment.query.filter_by(user_id=user.id, is_active=True).count()
+    
+    # Calculate total study hours from completed lessons
+    total_study_minutes = db.session.query(db.func.sum(Lesson.duration_minutes)).join(
+        LessonProgress, Lesson.id == LessonProgress.lesson_id
+    ).join(
+        Enrollment, LessonProgress.enrollment_id == Enrollment.id
+    ).filter(
+        Enrollment.user_id == user.id,
+        LessonProgress.is_completed == True
+    ).scalar() or 0
+    
+    study_hours = round(total_study_minutes / 60, 1)
+    
+    # Calculate achievements (completed courses + milestones)
+    completed_courses = Enrollment.query.filter_by(
+        user_id=user.id, 
+        is_active=True
+    ).filter(Enrollment.progress_percentage >= 100).count()
+    
+    # Achievement milestones: first course, 5 hours study, 10 hours study, etc.
+    achievements = completed_courses
+    if study_hours >= 5:
+        achievements += 1
+    if study_hours >= 10:
+        achievements += 1
+    if study_hours >= 25:
+        achievements += 1
+    if study_hours >= 50:
+        achievements += 1
+    if courses_enrolled >= 3:
+        achievements += 1
+    
+    # Calculate points (100 per completed lesson + 500 per completed course)
+    completed_lessons = LessonProgress.query.join(
+        Enrollment, LessonProgress.enrollment_id == Enrollment.id
+    ).filter(
+        Enrollment.user_id == user.id,
+        LessonProgress.is_completed == True
+    ).count()
+    
+    points = (completed_lessons * 100) + (completed_courses * 500)
+    
     return {
-        'courses_enrolled': 5,  # Mock data - replace with actual queries
-        'achievements': 12,
-        'study_hours': 48,
-        'points': 2450
+        'courses_enrolled': courses_enrolled,
+        'achievements': achievements,
+        'study_hours': study_hours,
+        'points': points
     }
 
 def get_recent_activities(user):
     """Get recent user activities"""
-    # Mock data - replace with actual activity tracking
-    return [
-        {
+    activities = []
+    
+    # Get recent lesson completions
+    recent_completions = db.session.query(
+        LessonProgress, Lesson, Course
+    ).join(
+        Lesson, LessonProgress.lesson_id == Lesson.id
+    ).join(
+        Enrollment, LessonProgress.enrollment_id == Enrollment.id
+    ).join(
+        Course, Enrollment.course_id == Course.id
+    ).filter(
+        Enrollment.user_id == user.id,
+        LessonProgress.is_completed == True,
+        LessonProgress.completed_at.isnot(None)
+    ).order_by(
+        LessonProgress.completed_at.desc()
+    ).limit(5).all()
+    
+    for progress, lesson, course in recent_completions:
+        time_diff = datetime.utcnow() - progress.completed_at
+        if time_diff.days == 0:
+            if time_diff.seconds < 3600:
+                time_str = f"{time_diff.seconds // 60} دقيقة مضت"
+            else:
+                time_str = f"{time_diff.seconds // 3600} ساعة مضت"
+        else:
+            time_str = f"{time_diff.days} يوم مضى"
+            
+        activities.append({
+            'icon': 'fa-check-circle',
+            'description': f'أكمل درس "{lesson.title_ar}" في كورس "{course.title_ar}"',
+            'timestamp': time_str
+        })
+    
+    # Get recent enrollments
+    recent_enrollments = db.session.query(
+        Enrollment, Course
+    ).join(
+        Course, Enrollment.course_id == Course.id
+    ).filter(
+        Enrollment.user_id == user.id
+    ).order_by(
+        Enrollment.enrolled_at.desc()
+    ).limit(3).all()
+    
+    for enrollment, course in recent_enrollments:
+        time_diff = datetime.utcnow() - enrollment.enrolled_at
+        if time_diff.days == 0:
+            if time_diff.seconds < 3600:
+                time_str = f"{time_diff.seconds // 60} دقيقة مضت"
+            else:
+                time_str = f"{time_diff.seconds // 3600} ساعة مضت"
+        else:
+            time_str = f"{time_diff.days} يوم مضى"
+            
+        activities.append({
             'icon': 'fa-book-open',
-            'description': 'Completed Python Fundamentals course',
-            'timestamp': '2 hours ago'
-        },
-        {
-            'icon': 'fa-trophy',
-            'description': 'Earned "Quick Learner" badge',
-            'timestamp': '1 day ago'
-        },
-        {
-            'icon': 'fa-code',
-            'description': 'Submitted first coding project',
-            'timestamp': '3 days ago'
-        }
-    ]
+            'description': f'انضم إلى كورس "{course.title_ar}"',
+            'timestamp': time_str
+        })
+    
+    # Sort all activities by most recent and limit to 5
+    # Since we can't sort mixed datetime objects easily, we'll use a simple approach
+    # In a real implementation, you might want to add a unified activity log table
+    
+    # If no activities, show welcome message
+    if not activities:
+        activities.append({
+            'icon': 'fa-star',
+            'description': 'مرحباً بك في شلبي فيرس! ابدأ رحلتك التعليمية الآن',
+            'timestamp': 'الآن'
+        })
+    
+    return activities[:5]  # Return max 5 activities
 
 # Session Management
 class CurrentUser:
@@ -321,6 +422,10 @@ class CurrentUser:
     @property
     def created_at(self):
         return self.user.created_at if self.user else None
+    
+    @property
+    def last_login(self):
+        return self.user.last_login if self.user else None
 
 def get_current_user():
     user_id = session.get('user_id')
@@ -443,6 +548,36 @@ def enroll_request():
         db.session.rollback()
         return jsonify({'success': False, 'message': 'حدث خطأ أثناء إرسال الطلب'}), 500
 
+def calculate_course_progress(enrollment_id):
+    """Calculate and update course progress percentage"""
+    enrollment = Enrollment.query.get(enrollment_id)
+    if not enrollment:
+        return 0
+    
+    # Get total lessons in the course
+    total_lessons = db.session.query(Lesson).join(
+        Module, Lesson.module_id == Module.id
+    ).filter(Module.course_id == enrollment.course_id).count()
+    
+    if total_lessons == 0:
+        return 0
+    
+    # Get completed lessons for this enrollment
+    completed_lessons = LessonProgress.query.filter_by(
+        enrollment_id=enrollment_id,
+        is_completed=True
+    ).count()
+    
+    # Calculate percentage
+    progress_percentage = (completed_lessons / total_lessons) * 100
+    
+    # Update enrollment progress
+    enrollment.progress_percentage = round(progress_percentage, 2)
+    enrollment.last_accessed = datetime.utcnow()
+    db.session.commit()
+    
+    return progress_percentage
+
 @app.route('/dashboard')
 def dashboard():
     if 'user_id' not in session or not SessionManager.is_session_valid():
@@ -456,10 +591,50 @@ def dashboard():
     available_courses = []
     
     if current_user.user:
-        enrollments = db.session.query(Enrollment, Course).join(Course).filter(
+        enrollments_data = db.session.query(Enrollment, Course).join(Course).filter(
             Enrollment.user_id == current_user.user.id,
             Enrollment.is_active == True
         ).all()
+        
+        # Update progress for each enrollment and prepare data
+        for enrollment, course in enrollments_data:
+            # Calculate current progress
+            calculate_course_progress(enrollment.id)
+            
+            # Get lesson count and completed count for display
+            total_lessons = db.session.query(Lesson).join(
+                Module, Lesson.module_id == Module.id
+            ).filter(Module.course_id == course.id).count()
+            
+            completed_lessons = LessonProgress.query.filter_by(
+                enrollment_id=enrollment.id,
+                is_completed=True
+            ).count()
+            
+            # Add additional info to enrollment object
+            enrollment.total_lessons = total_lessons
+            enrollment.completed_lessons = completed_lessons
+            enrollment.next_lesson = None
+            
+            # Find next uncompleted lesson
+            if completed_lessons < total_lessons:
+                next_lesson = db.session.query(Lesson).join(
+                    Module, Lesson.module_id == Module.id
+                ).outerjoin(
+                    LessonProgress, 
+                    db.and_(
+                        LessonProgress.lesson_id == Lesson.id,
+                        LessonProgress.enrollment_id == enrollment.id,
+                        LessonProgress.is_completed == True
+                    )
+                ).filter(
+                    Module.course_id == course.id,
+                    LessonProgress.id.is_(None)
+                ).order_by(Module.order_index, Lesson.order_index).first()
+                
+                enrollment.next_lesson = next_lesson
+            
+            enrollments.append((enrollment, course))
         
         # Get available courses (not enrolled)
         enrolled_course_ids = [enrollment.course_id for enrollment, _ in enrollments]

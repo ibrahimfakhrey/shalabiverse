@@ -7,7 +7,372 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeProgressBars();
     initializeAnimations();
     initializeInteractions();
+    initializeRealTimeUpdates();
+    initializeStatisticsInteractions();
+    initializeAutoRefresh();
 });
+
+// Real-time updates functionality
+function initializeRealTimeUpdates() {
+    // Auto-refresh user statistics every 5 minutes
+    setInterval(refreshUserStats, 5 * 60 * 1000);
+    
+    // Auto-refresh recent activities every 2 minutes
+    setInterval(refreshRecentActivities, 2 * 60 * 1000);
+    
+    // Check for new notifications every minute
+    setInterval(checkNewNotifications, 60 * 1000);
+}
+
+// Statistics interactions
+function initializeStatisticsInteractions() {
+    const statCards = document.querySelectorAll('.stat-card');
+    
+    statCards.forEach(card => {
+        // Add hover effects with data visualization
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px) scale(1.02)';
+            this.style.boxShadow = '0 20px 40px rgba(39, 110, 241, 0.2)';
+            
+            // Add pulse animation to stat numbers
+            const statNumber = this.querySelector('.stat-content h3');
+            if (statNumber) {
+                statNumber.style.animation = 'pulse 1s ease-in-out';
+            }
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+            this.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+            
+            const statNumber = this.querySelector('.stat-content h3');
+            if (statNumber) {
+                statNumber.style.animation = '';
+            }
+        });
+        
+        // Add click functionality for detailed stats
+        card.addEventListener('click', function() {
+            const statType = this.dataset.statType;
+            showDetailedStats(statType);
+        });
+    });
+}
+
+// Auto-refresh functionality
+function initializeAutoRefresh() {
+    let refreshInterval;
+    let isAutoRefreshEnabled = localStorage.getItem('autoRefresh') !== 'false';
+    
+    // Create auto-refresh toggle
+    const autoRefreshToggle = createAutoRefreshToggle();
+    document.querySelector('.dashboard-header').appendChild(autoRefreshToggle);
+    
+    function startAutoRefresh() {
+        if (refreshInterval) clearInterval(refreshInterval);
+        refreshInterval = setInterval(() => {
+            refreshDashboardData();
+            showNotification('تم تحديث البيانات تلقائياً', 'info');
+        }, 10 * 60 * 1000); // Every 10 minutes
+    }
+    
+    function stopAutoRefresh() {
+        if (refreshInterval) {
+            clearInterval(refreshInterval);
+            refreshInterval = null;
+        }
+    }
+    
+    // Initialize based on saved preference
+    if (isAutoRefreshEnabled) {
+        startAutoRefresh();
+        autoRefreshToggle.classList.add('active');
+    }
+    
+    // Toggle functionality
+    autoRefreshToggle.addEventListener('click', function() {
+        isAutoRefreshEnabled = !isAutoRefreshEnabled;
+        localStorage.setItem('autoRefresh', isAutoRefreshEnabled);
+        
+        if (isAutoRefreshEnabled) {
+            startAutoRefresh();
+            this.classList.add('active');
+            showNotification('تم تفعيل التحديث التلقائي', 'success');
+        } else {
+            stopAutoRefresh();
+            this.classList.remove('active');
+            showNotification('تم إيقاف التحديث التلقائي', 'info');
+        }
+    });
+}
+
+// Create auto-refresh toggle button
+function createAutoRefreshToggle() {
+    const toggle = document.createElement('button');
+    toggle.className = 'auto-refresh-toggle';
+    toggle.innerHTML = `
+        <i class="fas fa-sync-alt"></i>
+        <span>التحديث التلقائي</span>
+    `;
+    toggle.style.cssText = `
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 0.5rem 1rem;
+        color: var(--text-primary);
+        font-family: 'Cairo', sans-serif;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    `;
+    
+    return toggle;
+}
+
+// Refresh functions
+async function refreshUserStats() {
+    try {
+        const response = await fetch('/api/user-stats');
+        if (response.ok) {
+            const stats = await response.json();
+            updateStatsDisplay(stats);
+        }
+    } catch (error) {
+        console.error('Error refreshing user stats:', error);
+    }
+}
+
+async function refreshRecentActivities() {
+    try {
+        const response = await fetch('/api/recent-activities');
+        if (response.ok) {
+            const activities = await response.json();
+            updateActivitiesDisplay(activities);
+        }
+    } catch (error) {
+        console.error('Error refreshing activities:', error);
+    }
+}
+
+async function checkNewNotifications() {
+    try {
+        const response = await fetch('/api/notifications/check');
+        if (response.ok) {
+            const data = await response.json();
+            if (data.hasNew) {
+                showNotification('لديك إشعارات جديدة!', 'info');
+                updateNotificationBadge(data.count);
+            }
+        }
+    } catch (error) {
+        console.error('Error checking notifications:', error);
+    }
+}
+
+async function refreshDashboardData() {
+    try {
+        const [statsResponse, activitiesResponse] = await Promise.all([
+            fetch('/api/user-stats'),
+            fetch('/api/recent-activities')
+        ]);
+        
+        if (statsResponse.ok && activitiesResponse.ok) {
+            const [stats, activities] = await Promise.all([
+                statsResponse.json(),
+                activitiesResponse.json()
+            ]);
+            
+            updateStatsDisplay(stats);
+            updateActivitiesDisplay(activities);
+            
+            // Add refresh animation
+            document.querySelectorAll('.stat-card, .activity-item').forEach(el => {
+                el.style.animation = 'refreshPulse 0.5s ease';
+            });
+        }
+    } catch (error) {
+        console.error('Error refreshing dashboard data:', error);
+        showNotification('حدث خطأ في تحديث البيانات', 'error');
+    }
+}
+
+// Update display functions
+function updateStatsDisplay(stats) {
+    const statCards = document.querySelectorAll('.stat-card');
+    
+    statCards.forEach(card => {
+        const statType = card.dataset.statType;
+        const statNumber = card.querySelector('.stat-content h3');
+        
+        if (statNumber && stats[statType] !== undefined) {
+            animateNumber(statNumber, parseInt(statNumber.textContent), stats[statType]);
+        }
+    });
+}
+
+function updateActivitiesDisplay(activities) {
+    const activitiesContainer = document.querySelector('.activities-list');
+    if (!activitiesContainer) return;
+    
+    // Clear existing activities
+    activitiesContainer.innerHTML = '';
+    
+    if (activities.length === 0) {
+        activitiesContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-clock"></i>
+                <p>لا توجد أنشطة حديثة</p>
+            </div>
+        `;
+        return;
+    }
+    
+    activities.forEach(activity => {
+        const activityElement = createActivityElement(activity);
+        activitiesContainer.appendChild(activityElement);
+    });
+}
+
+function createActivityElement(activity) {
+    const element = document.createElement('div');
+    element.className = 'activity-item';
+    element.innerHTML = `
+        <div class="activity-icon">
+            <i class="fas ${getActivityIcon(activity.type)}"></i>
+        </div>
+        <div class="activity-content">
+            <p>${activity.description}</p>
+            <span class="activity-time">${activity.time_ago}</span>
+        </div>
+    `;
+    return element;
+}
+
+function getActivityIcon(type) {
+    const icons = {
+        'lesson_completed': 'fa-check-circle',
+        'course_enrolled': 'fa-book-open',
+        'achievement_earned': 'fa-trophy',
+        'default': 'fa-bell'
+    };
+    return icons[type] || icons.default;
+}
+
+// Show detailed statistics modal
+function showDetailedStats(statType) {
+    const modal = createStatsModal(statType);
+    document.body.appendChild(modal);
+    
+    // Animate modal in
+    setTimeout(() => {
+        modal.classList.add('active');
+    }, 10);
+    
+    // Close modal functionality
+    const closeBtn = modal.querySelector('.close-modal');
+    const overlay = modal.querySelector('.modal-overlay');
+    
+    [closeBtn, overlay].forEach(el => {
+        el.addEventListener('click', () => {
+            modal.classList.remove('active');
+            setTimeout(() => modal.remove(), 300);
+        });
+    });
+}
+
+function createStatsModal(statType) {
+    const modal = document.createElement('div');
+    modal.className = 'stats-modal';
+    
+    const titles = {
+        'courses_enrolled': 'الدورات المسجلة',
+        'study_hours': 'ساعات الدراسة',
+        'achievements': 'الإنجازات',
+        'points': 'النقاط'
+    };
+    
+    modal.innerHTML = `
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>${titles[statType] || 'الإحصائيات'}</h3>
+                <button class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="stats-chart-container">
+                    <canvas id="statsChart"></canvas>
+                </div>
+                <div class="stats-details">
+                    <p>تفاصيل إضافية حول ${titles[statType]} ستظهر هنا</p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    return modal;
+}
+
+// Number animation function
+function animateNumber(element, start, end, duration = 1000) {
+    const startTime = performance.now();
+    const difference = end - start;
+    
+    function updateNumber(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const current = Math.round(start + (difference * easeOutQuart));
+        
+        element.textContent = current.toLocaleString('ar');
+        
+        if (progress < 1) {
+            requestAnimationFrame(updateNumber);
+        }
+    }
+    
+    requestAnimationFrame(updateNumber);
+}
+
+// Update notification badge
+function updateNotificationBadge(count) {
+    let badge = document.querySelector('.notification-badge');
+    
+    if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'notification-badge';
+        const notificationLink = document.querySelector('a[href*="notifications"]');
+        if (notificationLink) {
+            notificationLink.style.position = 'relative';
+            notificationLink.appendChild(badge);
+        }
+    }
+    
+    badge.textContent = count > 99 ? '99+' : count;
+    badge.style.cssText = `
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #FF6F91;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        font-size: 0.7rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        animation: bounce 0.5s ease;
+    `;
+}
 
 // Sidebar functionality
 function initializeSidebar() {
